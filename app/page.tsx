@@ -8,23 +8,31 @@ import { ScrollTrigger } from "gsap/all"
 import gsap from "gsap"
 import { useEffect, useRef } from "react"
 
+
 gsap.registerPlugin(ScrollTrigger)
 
 export default function PocsaLanding() {
-  const logoMaskRef = useRef<HTMLDivElement>(null)
-  const heroTitleRef = useRef<HTMLDivElement>(null)
-  const subtitleRef = useRef<HTMLParagraphElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
+  const logoMaskRef    = useRef<HTMLDivElement>(null)
+  const heroTitleRef   = useRef<HTMLDivElement>(null)
+  const subtitleRef    = useRef<HTMLParagraphElement>(null)
+  const imageRef       = useRef<HTMLDivElement>(null)
+  const textRef        = useRef<HTMLDivElement>(null)
+  const wrapper2Ref    = useRef<HTMLDivElement>(null)  // ← Nuevo ref para el wrapper del texto
 
   useEffect(() => {
-    // Verificar que todos los elementos existan antes de animar
-    if (!logoMaskRef.current || !heroTitleRef.current || !subtitleRef.current) {
-      return
-    }
+    if (
+      !logoMaskRef.current ||
+      !heroTitleRef.current ||
+      !subtitleRef.current ||
+      !imageRef.current ||
+      !textRef.current ||
+      !wrapper2Ref.current
+    ) return
 
-    // Limpiar animaciones previas
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+    // Limpia triggers antiguos
+    ScrollTrigger.getAll().forEach((t) => t.kill())
 
+    // Timeline único para todo el scroll
     const tl = gsap.timeline({
       ease: "power2.out",
       scrollTrigger: {
@@ -32,50 +40,51 @@ export default function PocsaLanding() {
         start: "top top",
         end: "+=200%",
         scrub: 1,
-        onUpdate: (self) => {
-          // Verificar que los elementos aún existan durante la animación
-          if (!logoMaskRef.current || !heroTitleRef.current || !subtitleRef.current) {
-            return
-          }
-        },
       },
     })
 
-    tl.to(subtitleRef.current, {
-      opacity: 0,
-      duration: 0.1,
-    })
+    tl
+      .to(subtitleRef.current, { opacity: 0, duration: 0.1 })
       .to(
         heroTitleRef.current,
-        {
-          y: -50,
-          opacity: 0,
-          duration: 0.2,
-        },
-        "<",
+        { y: -50, opacity: 0, duration: 0.2 },
+        "<"
       )
       .to(
         logoMaskRef.current,
-        {
-          maskSize: "clamp(15vh, 25%, 30vh)",
-          duration: 0.1,
-        },
-        "<",
+        { maskSize: "clamp(15vh, 25%, 30vh)", duration: 0.2 },
+        "<"
       )
       .to(
         imageRef.current,
+        { opacity: 0, duration: 0.15 },
+        0.05
+      )
+      // — Aquí metemos la animación del texto **en el mismo** timeline —
+      .fromTo(
+        textRef.current,
+        { x: "100%" },          // empieza fuera az la derecha
         {
-          opacity: 0,
-          duration: 0.1,
-        }, 0.05
-        
+          x: "-100%",           // termina fuera a la izquierda
+          ease: "none",
+          duration: 0.5,        // controla qué tan “largo” es dentro del scroll
+        },
+        "<"                     // empalma con la animación anterior
+      )
+      .to(
+        wrapper2Ref.current,
+        {
+          position: "fixed",
+          top: "35%",
+          left: "45%",
+          duration: 0
+        },
+        "<"
       )
 
-    // Cleanup function
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
-    }
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill())
   }, [])
+
 
   return (
     <>
@@ -198,27 +207,36 @@ export default function PocsaLanding() {
         </section>
       </div>
 
-      {/* Spacer para permitir scroll */}
-      <div className="h-[300vh]" />
 
-      {/* Contenido adicional */}
-      <div className="relative z-30 bg-white">
-        <section className="min-h-screen p-8">
-          <div className="max-w-4xl mx-auto pt-20">
-            <h2 className="text-4xl font-bold text-gray-900 mb-8">Nuestros Productos</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Descubre nuestra amplia gama de muebles diseñados para transformar tu hogar.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500">Producto {item}</span>
-                </div>
-              ))}
+      <div className="h-[90vh]" />
+
+      {/* — Sección extra con el texto que revelamos — */}
+      <section className="relative z-30 bg-black/20">
+        <section className="min-h-screen p-8 flex items-center justify-center">
+          <div
+            ref={wrapper2Ref}
+            className="relative w-full max-w-3xl h-64 overflow-hidden"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+            }}
+          >
+            <div
+              ref={textRef}
+              className="absolute whitespace-nowrap text-white text-6xl font-bold top-1/2 left-0"
+              style={{ transform: "translateY(-50%)" }}
+            >
+              LOS ESPACIOS Y TRANSFORMACIONES
             </div>
           </div>
         </section>
-      </div>
+      </section>
+
+
 
       <style jsx>{`
         .liquid-glass-text {
