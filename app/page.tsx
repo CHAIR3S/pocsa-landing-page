@@ -81,6 +81,15 @@ export default function PocsaLanding() {
         },
         "<"
       )
+      .to(
+        logoMaskRef.current,
+        {
+          opacity: 0,
+          duration: 0.1,
+        },
+        .45
+      )
+
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill())
   }, [])
@@ -230,11 +239,16 @@ export default function PocsaLanding() {
               className="absolute whitespace-nowrap text-white text-6xl font-bold top-1/2 left-0"
               style={{ transform: "translateY(-50%)" }}
             >
-              LOS ESPACIOS Y TRANSFORMACIONES
+              USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
             </div>
           </div>
         </section>
       </section>
+
+
+
+      {/* <MaterialsSection /> */}
+
 
 
 
