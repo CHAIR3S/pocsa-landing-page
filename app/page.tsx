@@ -57,8 +57,8 @@ export default function PocsaLanding() {
       )
       .to(
         imageRef.current,
-        { opacity: 0, duration: 0.15 },
-        0.05
+        { opacity: 0, duration: 0.20 },
+        0.08
       )
       // — Aquí metemos la animación del texto **en el mismo** timeline —
       .fromTo(
@@ -67,7 +67,7 @@ export default function PocsaLanding() {
         {
           x: "-100%",           // termina fuera a la izquierda
           ease: "none",
-          duration: 0.5,        // controla qué tan “largo” es dentro del scroll
+          duration: 0.3,        // controla qué tan “largo” es dentro del scroll
         },
         "<"                     // empalma con la animación anterior
       )
@@ -87,7 +87,7 @@ export default function PocsaLanding() {
           opacity: 0,
           duration: 0.1,
         },
-        .45
+        0.3
       )
 
 
@@ -98,7 +98,7 @@ export default function PocsaLanding() {
   return (
     <>
       {/* Navigation */}
-      <header className="fixed w-full z-50 flex items-center justify-between p-6 lg:px-12">
+      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12">
         <div className="flex items-center space-x-2">
           <Image src="/logo-pocsa-color.svg" alt="Icono" width={100} height={100} />
         </div>
@@ -130,7 +130,7 @@ export default function PocsaLanding() {
           </div>
           <Button
             variant="outline"
-            className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md"
+            className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md cursorpoin"
           >
             Cotizar
           </Button>
@@ -175,7 +175,7 @@ export default function PocsaLanding() {
                 ref={subtitleRef}
                 className="text-white/90 text-lg md:text-xl text-center max-w-2xl mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-2xl border border-white/20"
               >
-                Diseños únicos que transforman espacios en experiencias extraordinarias
+                Somos una empresa especializada en la fabricación de una amplia gama de muebles personalizados de alta calidad. Nuestro compromiso es transformar tus ideas en piezas únicas que reflejen tu estilo y necesidades.
               </p>
 
               {/* CTA Buttons */}
@@ -198,7 +198,7 @@ export default function PocsaLanding() {
           </div>
 
           {/* Bottom Info */}
-          <footer className="absolute bottom-8 left-6 right-6 z-10">
+          <footer className="absolute bottom-[2vh] left-6 right-6 z-10">
             <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 w-full">
               <div className="flex items-center space-x-6 text-white/80 text-sm">
                 <div className="flex items-center space-x-2">
@@ -220,7 +220,7 @@ export default function PocsaLanding() {
       <div className="h-[90vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
-      <section className="relative z-30 bg-black/20">
+      <section className="relative z-30 bg-[#111]">
         <section className="min-h-screen p-8 flex items-center justify-center">
           <div
             ref={wrapper2Ref}
@@ -248,6 +248,9 @@ export default function PocsaLanding() {
 
 
       {/* <MaterialsSection /> */}
+      <section className="bg-red h-screen absolute z-50">
+
+      </section>
 
 
 
