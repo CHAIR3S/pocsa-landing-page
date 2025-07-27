@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Menu, Phone, Mail, MapPin } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import { ScrollTrigger } from "gsap/all"
-import gsap from "gsap"
-import { useEffect, useRef } from "react"
+import { Button } from "@/components/ui/button";
+import { Menu, Phone, Mail, MapPin } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ScrollTrigger } from "gsap/all";
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
+import BentoGrid from "../components/BentoGrid";
 
-
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger);
 
 export default function PocsaLanding() {
-  const logoMaskRef    = useRef<HTMLDivElement>(null)
-  const heroTitleRef   = useRef<HTMLDivElement>(null)
-  const subtitleRef    = useRef<HTMLParagraphElement>(null)
-  const imageRef       = useRef<HTMLDivElement>(null)
-  const textRef        = useRef<HTMLDivElement>(null)
-  const wrapper2Ref    = useRef<HTMLDivElement>(null)  // ← Nuevo ref para el wrapper del texto
+  const logoMaskRef = useRef<HTMLDivElement>(null);
+  const heroTitleRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const wrapper2Ref = useRef<HTMLDivElement>(null); // ← Nuevo ref para el wrapper del texto
 
   useEffect(() => {
     if (
@@ -27,10 +27,11 @@ export default function PocsaLanding() {
       !imageRef.current ||
       !textRef.current ||
       !wrapper2Ref.current
-    ) return
+    )
+      return;
 
     // Limpia triggers antiguos
-    ScrollTrigger.getAll().forEach((t) => t.kill())
+    ScrollTrigger.getAll().forEach((t) => t.kill());
 
     // Timeline único para todo el scroll
     const tl = gsap.timeline({
@@ -41,83 +42,95 @@ export default function PocsaLanding() {
         end: "+=200%",
         scrub: 1,
       },
-    })
+    });
 
-    tl
-      .to(subtitleRef.current, { opacity: 0, duration: 0.1 })
-      .to(
-        heroTitleRef.current,
-        { y: -50, opacity: 0, duration: 0.2 },
-        "<"
-      )
+    tl.to(subtitleRef.current, { opacity: 0, duration: 0.1 })
+      .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.2 }, "<")
       .to(
         logoMaskRef.current,
         { maskSize: "clamp(15vh, 25%, 30vh)", duration: 0.2 },
         "<"
       )
-      .to(
-        imageRef.current,
-        { opacity: 0, duration: 0.20 },
-        0.08
-      )
+      .to(imageRef.current, { opacity: 0, duration: 0.2 }, 0.08)
       // — Aquí metemos la animación del texto **en el mismo** timeline —
       .fromTo(
         textRef.current,
-        { x: "100%" },          // empieza fuera az la derecha
+        { x: "100%" }, // empieza fuera az la derecha
         {
-          x: "-100%",           // termina fuera a la izquierda
+          x: "-100%", // termina fuera a la izquierda
           ease: "none",
-          duration: 0.3,        // controla qué tan “largo” es dentro del scroll
+          duration: 0.3, // controla qué tan “largo” es dentro del scroll
         },
-        "<"                     // empalma con la animación anterior
+        "<" // empalma con la animación anterior
       )
       .to(
         wrapper2Ref.current,
-        {
-          position: "fixed",
-          top: "35%",
-          left: "45%",
-          duration: 0
-        },
+        { position: "fixed", top: "35%", left: "45%", duration: 0 },
         "<"
       )
       .to(
         logoMaskRef.current,
-        {
-          opacity: 0,
-          duration: 0.1,
-        },
+        { autoAlpha: 0, duration: 0.1 }, //  animamos autoAlpha en vez de opacity
         0.3
       )
+      .to(wrapper2Ref.current, { autoAlpha: 0, duration: 0.1 }, ">");
 
-
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill())
-  }, [])
-
+    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+  }, []);
 
   return (
     <>
       {/* Navigation */}
-      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12">
-        <div className="flex items-center space-x-2">
-          <Image src="/logo-pocsa-color.svg" alt="Icono" width={100} height={100} />
+      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 glass-header">
+        <div
+          className=" space-x-2"
+          style={{
+            width: 100,
+            height: 67,
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          <Image
+            src="/logo-pocsa-color.svg"
+            alt="Icono"
+            fill
+            style={{
+              objectFit: "cover",
+            }}
+          />
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw]">
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className="text-white/90 hover:text-white transition-colors font-medium"
+          >
             HOME
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className="text-white/90 hover:text-white transition-colors font-medium"
+          >
             PRODUCTOS
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className="text-white/90 hover:text-white transition-colors font-medium"
+          >
             SERVICIOS
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className="text-white/90 hover:text-white transition-colors font-medium"
+          >
             GALERÍA
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className="text-white/90 hover:text-white transition-colors font-medium"
+          >
             CONTACTO
           </Link>
         </nav>
@@ -143,7 +156,10 @@ export default function PocsaLanding() {
       </header>
 
       {/* Contenido principal con máscara */}
-      <div ref={logoMaskRef} className="logo-mask fixed top-0 w-full h-screen z-40">
+      <div
+        ref={logoMaskRef}
+        className="logo-mask fixed top-0 w-full h-screen z-40"
+      >
         <section className="relative h-full">
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
@@ -175,7 +191,10 @@ export default function PocsaLanding() {
                 ref={subtitleRef}
                 className="text-white/90 text-lg md:text-xl text-center max-w-2xl mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-2xl border border-white/20"
               >
-                Somos una empresa especializada en la fabricación de una amplia gama de muebles personalizados de alta calidad. Nuestro compromiso es transformar tus ideas en piezas únicas que reflejen tu estilo y necesidades.
+                Somos una empresa especializada en la fabricación de una amplia
+                gama de muebles personalizados de alta calidad. Nuestro
+                compromiso es transformar tus ideas en piezas únicas que
+                reflejen tu estilo y necesidades.
               </p>
 
               {/* CTA Buttons */}
@@ -210,12 +229,13 @@ export default function PocsaLanding() {
                   <span>info@pocsamuebles.com</span>
                 </div>
               </div>
-              <div className="text-white/60 text-sm">© 2024 POCSA Muebles. Todos los derechos reservados.</div>
+              <div className="text-white/60 text-sm">
+                © 2024 POCSA Muebles. Todos los derechos reservados.
+              </div>
             </div>
           </footer>
         </section>
       </div>
-
 
       <div className="h-[90vh]" />
 
@@ -245,17 +265,57 @@ export default function PocsaLanding() {
         </section>
       </section>
 
-
-
       {/* <MaterialsSection /> */}
-      <section className="bg-red h-screen absolute z-50">
+      <div className=" w-screen h-[90vh] "></div>
 
+      <section className=" w-screen h-screen bg-red-500"></section>
+
+      <section className=" w-screen  bg-[#111] z-[200]">
+        <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold ">
+          Nuestros
+        </h2>
+        <h2 className="relative top-[-8vh] left-[10vw] text-7xl font-bold">
+          Productos
+        </h2>
+
+        <BentoGrid />
       </section>
 
-
-
-
       <style jsx>{`
+
+        
+        .glass-header {
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s ease;
+        }
+
+        .glass-header::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(255, 255, 255, 0.1) 100%
+          );
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        .glass-header:hover {
+          background: rgba(255, 255, 255, 0.12);
+          border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+
         .liquid-glass-text {
           background: linear-gradient(
             135deg,
@@ -308,8 +368,8 @@ export default function PocsaLanding() {
 
         .logo-mask {
           background-color: white;
-          -webkit-mask-image: url('/logo-pocsa-color.svg');
-          mask-image: url('/logo-pocsa-color.svg');
+          -webkit-mask-image: url("/logo-pocsa-color.svg");
+          mask-image: url("/logo-pocsa-color.svg");
           -webkit-mask-position: 35%;
           mask-position: 35%;
           -webkit-mask-repeat: no-repeat;
@@ -319,5 +379,5 @@ export default function PocsaLanding() {
         }
       `}</style>
     </>
-  )
+  );
 }
