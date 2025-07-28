@@ -1,15 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Menu, Phone, Mail, MapPin } from "lucide-react";
+import { Menu, Phone, Mail, MapPin, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { ScrollTrigger } from "gsap/all";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import BentoGrid from "../components/BentoGrid";
 import ClientsCarousel from "@/components/ClientsCarousel";
 import { FurAnimation } from "@/components/WebMAnimation";
+import ContactForm from "@/components/ContactForm";
+import FAQ from "@/components/FAQ";
+import Footer from "@/components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +23,16 @@ export default function PocsaLanding() {
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const wrapper2Ref = useRef<HTMLDivElement>(null);
+  
+  const [isProductsOpen, setIsProductsOpen] = useState(false)
+
+  const productLines = [
+    "Línea Metálica",
+    "Línea de Almacenamiento",
+    "Línea Escolar",
+    "Línea para el Hogar",
+    "Línea de Oficina",
+  ]
 
   useEffect(() => {
     if (
@@ -54,14 +67,14 @@ export default function PocsaLanding() {
         "<"
       )
       .to(imageRef.current, { opacity: 0, duration: 0.2 }, 0.08)
-      // — Aquí metemos la animación del texto **en el mismo** timeline —
+      // Aquí metemos la animación del texto en el mismo timeline 
       .fromTo(
         textRef.current,
         { x: "100%" }, // empieza fuera az la derecha
         {
           x: "-100%", // termina fuera a la izquierda
           ease: "none",
-          duration: 0.3, // controla qué tan “largo” es dentro del scroll
+          duration: 0.3, 
         },
         "<" // empalma con la animación anterior
       )
@@ -103,36 +116,49 @@ export default function PocsaLanding() {
           />
         </div>
 
+
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw]">
-          <Link
-            href="#"
-            className="text-white/90 hover:text-white transition-colors font-medium"
-          >
+          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
             HOME
           </Link>
-          <Link
-            href="#"
-            className="text-white/90 hover:text-white transition-colors font-medium"
-          >
-            PRODUCTOS
-          </Link>
-          <Link
-            href="#"
-            className="text-white/90 hover:text-white transition-colors font-medium"
-          >
+
+          {/* Dropdown de Productos */}
+          <div className="relative">
+            <button
+              onClick={() => setIsProductsOpen(!isProductsOpen)}
+              onMouseEnter={() => setIsProductsOpen(true)}
+              className="text-white/90 hover:text-white transition-colors font-medium flex items-center gap-1"
+            >
+              PRODUCTOS
+              <ChevronDown className={`w-4 h-4 transition-transform ${isProductsOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isProductsOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-white/20 py-2"
+                onMouseLeave={() => setIsProductsOpen(false)}
+              >
+                {productLines.map((line, index) => (
+                  <Link
+                    key={index}
+                    href="#"
+                    className="block px-4 py-3 text-gray-800 hover:bg-white/50 hover:text-black transition-colors font-medium"
+                  >
+                    {line}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
             SERVICIOS
           </Link>
-          <Link
-            href="#"
-            className="text-white/90 hover:text-white transition-colors font-medium"
-          >
+          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
             GALERÍA
           </Link>
-          <Link
-            href="#"
-            className="text-white/90 hover:text-white transition-colors font-medium"
-          >
+          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
             CONTACTO
           </Link>
         </nav>
@@ -346,6 +372,22 @@ export default function PocsaLanding() {
           <span className="text-4xl align-bottom leading-none">»</span>
         </h3>
       </section>
+
+
+      <section className="w-screen h-screen bg-[#111] flex items-center justify-center">
+        <h3 className="text-8xl font-semibold">Hacemos envíos a todo México!!</h3>
+      </section>
+
+
+      {/* Formulario de Contacto */}
+      <ContactForm />
+
+      {/* FAQ */}
+      <FAQ />
+
+      {/* Footer */}
+      <Footer />
+
 
       <style jsx>{`
         .glass-header {
