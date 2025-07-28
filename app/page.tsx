@@ -8,6 +8,8 @@ import { ScrollTrigger } from "gsap/all";
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
 import BentoGrid from "../components/BentoGrid";
+import ClientsCarousel from "@/components/ClientsCarousel";
+import { FurAnimation } from "@/components/WebMAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +19,7 @@ export default function PocsaLanding() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const wrapper2Ref = useRef<HTMLDivElement>(null); // ← Nuevo ref para el wrapper del texto
+  const wrapper2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (
@@ -278,12 +280,74 @@ export default function PocsaLanding() {
           Productos
         </h2>
 
+        {/* Bento grid products */}
+
         <BentoGrid />
       </section>
 
-      <style jsx>{`
+      {/* Clients Carousel */}
 
-        
+      <ClientsCarousel />
+
+      <section
+        className="w-screen h-screen "
+        style={{
+          backgroundImage: "url('/images/psicologo-foto.jpg')",
+          backgroundSize: "cover",
+        }}
+      ></section>
+
+      <section className="w-screen h-screen bg-[#111] flex flex-row container">
+        <div className="w-1/2 h-full flex items-center justify-center">
+          <FurAnimation width={600} height={723} />
+        </div>
+
+        <div className="w-1/2 h-full px-[10vw] ">
+          <h3 className="relative top-[-2vh] text-7xl font-bold">
+            Calidad y durabilidad en cada diseño
+          </h3>
+
+          <h4 className="relative left-[-5vw] py-[5vh] text-4xl text-[#c8f7bb] font-semibold ">
+            Muebles a tu medida, listos para inspirar.
+          </h4>
+
+          <div className="mt-[10vh]">
+            <span className="text-2xl font-bold ">
+              Creamos muebles personalizados con materiales premium,
+              certificados bajo los más altos estándares de
+            </span>
+            <span className="text-2xl font-bold text-[#3b94d0]">
+              {" "}
+              Marca Guanajuato
+            </span>
+            <span className="text-2xl font-bold ">
+              , para garantizar belleza, resistencia y satisfacción total.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="w-screen h-screen bg-black/10 bg-blend-multiply"
+        style={{
+          clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
+          backgroundImage: 'url("/images/oficina-portada-horizontal.jpg")',
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "80% center",
+        }}
+      >
+        {/* <h3 className="text-7xl font-semibold relative top-[13%] right-[-40%] t">&lt;&lt;Comodidad y Elegancia.&gt;&gt;</h3> */}
+        <h3 className="relative top-[13%] right-[-40%] text-7xl font-semibold">
+          {/* Apertura */}
+          <span className="text-4xl align-top leading-none">«</span>
+          Comodidad y Elegancia.
+          {/* Cierre */}
+          <span className="text-4xl align-bottom leading-none">»</span>
+        </h3>
+      </section>
+
+      <style jsx>{`
         .glass-header {
           background: rgba(255, 255, 255, 0.08);
           backdrop-filter: blur(20px);
@@ -294,7 +358,7 @@ export default function PocsaLanding() {
         }
 
         .glass-header::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
@@ -314,7 +378,6 @@ export default function PocsaLanding() {
           background: rgba(255, 255, 255, 0.12);
           border-bottom-color: rgba(255, 255, 255, 0.15);
         }
-
 
         .liquid-glass-text {
           background: linear-gradient(

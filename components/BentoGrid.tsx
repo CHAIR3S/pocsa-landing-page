@@ -135,7 +135,7 @@ export default function BentoGrid() {
   };
 
   return (
-    <div className="min-h-screen p-2">
+    <div className="min-h-screen mb-[10vh]">
       <div className="max-w-[80%] mx-auto">
         {/* Bento Grid */}
         <div className="grid grid-cols-12 grid-rows-8 gap-4 h-[800px]">
@@ -398,7 +398,7 @@ export default function BentoGrid() {
                 variant="ghost"
                 size="icon"
                 onClick={closeGallery}
-                className="text-white hover:bg-white hover:bg-opacity-20 cursor-pointer cursor-pointer"
+                className="text-white hover:bg-white hover:bg-opacity-20 cursor-pointer "
               >
                 <X className="h-6 w-6" />
               </Button>
