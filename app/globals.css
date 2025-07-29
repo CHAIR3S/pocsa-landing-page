@@ -133,3 +133,11 @@ code, pre {
     color: white;
   }
 }
+
+
+.background-polka {
+  background-color: #ffffff;
+  opacity: 0.7;
+  background: radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent) 20px 20px, linear-gradient(#41c522 1.6px, transparent 1.6px) 0 -0.8px, linear-gradient(90deg, #41c522 1.6px, #ffffff 1.6px) -0.8px 0;
+  background-size: 40px 40px, 40px 40px, 20px 20px, 20px 20px;
+}

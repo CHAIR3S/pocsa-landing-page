@@ -13,6 +13,7 @@ import { FurAnimation } from "@/components/WebMAnimation";
 import ContactForm from "@/components/ContactForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import { PackageAnimation } from '../components/PackageAnimation';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,7 +77,7 @@ export default function PocsaLanding() {
           ease: "none",
           duration: 0.3, 
         },
-        "<" // empalma con la animación anterior
+        "<" // empalma con la animacion anterior
       )
       .to(
         wrapper2Ref.current,
@@ -254,7 +255,7 @@ export default function PocsaLanding() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-4 h-4" />
-                  <span>info@pocsamuebles.com</span>
+                  <span>pocsaproyectos@gmail.com</span>
                 </div>
               </div>
               <div className="text-white/60 text-sm">
@@ -294,9 +295,11 @@ export default function PocsaLanding() {
       </section>
 
       {/* <MaterialsSection /> */}
-      <div className=" w-screen h-[90vh] "></div>
+      <div className=" w-screen h-[40vh] "></div>
 
-      <section className=" w-screen h-screen bg-red-500"></section>
+      <section className=" w-screen h-screen" style={{ backgroundImage: "url('/images/psicologo-foto.jpg')", backgroundSize: "cover" }}>
+
+      </section>
 
       <section className=" w-screen  bg-[#111] z-[200]">
         <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold ">
@@ -374,10 +377,17 @@ export default function PocsaLanding() {
       </section>
 
 
-      <section className="w-screen h-screen bg-[#111] flex items-center justify-center">
-        <h3 className="text-8xl font-semibold">Hacemos envíos a todo México!!</h3>
+      <section className="w-screen h-screen bg-[#111] flex items-center justify-center flex-col gap-32 ">
+        <div>
+        <span className="text-8xl font-semibold">Hacemos envíos a todo </span> <span className="text-8xl font-semibold text-[#9bef86]">México</span> <span className="text-8xl font-semibold">!!</span>
+
+        </div>
+        <PackageAnimation height={400} width={350} />
       </section>
 
+      <section className="w-screen h-screen background-polka" style={{ clipPath: "polygon(0 5%, 100% 0, 100% 100%, 0% 100%)" }}>
+
+      </section>
 
       {/* Formulario de Contacto */}
       <ContactForm />
