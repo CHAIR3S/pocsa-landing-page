@@ -24,8 +24,10 @@ export default function PocsaLanding() {
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const wrapper2Ref = useRef<HTMLDivElement>(null);
-  
   const [isProductsOpen, setIsProductsOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  
 
   const productLines = [
     "Línea Metálica",
@@ -34,6 +36,30 @@ export default function PocsaLanding() {
     "Línea para el Hogar",
     "Línea de Oficina",
   ]
+
+
+  
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setIsProductsOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsProductsOpen(false)
+    }, 150) // Pequeño delay para evitar parpadeos
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
 
   useEffect(() => {
     if (
@@ -125,32 +151,39 @@ export default function PocsaLanding() {
           </Link>
 
           {/* Dropdown de Productos */}
-          <div className="relative">
-            <button
-              onClick={() => setIsProductsOpen(!isProductsOpen)}
-              onMouseEnter={() => setIsProductsOpen(true)}
-              className="text-white/90 hover:text-white transition-colors font-medium flex items-center gap-1"
-            >
+          <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <button className="text-white/90 hover:text-white transition-colors font-medium flex items-center gap-1 py-2">
               PRODUCTOS
-              <ChevronDown className={`w-4 h-4 transition-transform ${isProductsOpen ? "rotate-180" : ""}`} />
+              <ChevronDown
+                className={`w-4 h-4 transition-all duration-200 ${isProductsOpen ? "rotate-180 text-[#9bef86]" : ""}`}
+              />
             </button>
 
-            {isProductsOpen && (
-              <div
-                className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-white/20 py-2"
-                onMouseLeave={() => setIsProductsOpen(false)}
-              >
+            {/* Dropdown Menu */}
+            <div
+              ref={dropdownRef}
+              className={`absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 transition-all duration-200 ease-out ${
+                isProductsOpen
+                  ? "opacity-100 translate-y-0 pointer-events-auto"
+                  : "opacity-0 -translate-y-2 pointer-events-none"
+              }`}
+            >
+              <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-3 overflow-hidden">
                 {productLines.map((line, index) => (
                   <Link
                     key={index}
                     href="#"
-                    className="block px-4 py-3 text-gray-800 hover:bg-white/50 hover:text-black transition-colors font-medium"
+                    className="block px-6 py-4 text-gray-800 hover:bg-[#9bef86]/20 hover:text-black transition-all duration-150 font-medium border-l-4 border-transparent hover:border-[#9bef86] hover:pl-8"
+                    style={{
+                      animationDelay: `${index * 50}ms`,
+                      animation: isProductsOpen ? "slideInFromLeft 0.3s ease-out forwards" : "none",
+                    }}
                   >
                     {line}
                   </Link>
                 ))}
               </div>
-            )}
+            </div>
           </div>
 
           <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
@@ -355,6 +388,8 @@ export default function PocsaLanding() {
           </div>
         </div>
       </section>
+      
+      <div className="bg-white">
 
       <section
         className="w-screen h-screen bg-black/10 bg-blend-multiply"
@@ -377,17 +412,22 @@ export default function PocsaLanding() {
       </section>
 
 
-      <section className="w-screen h-screen bg-[#111] flex items-center justify-center flex-col gap-32 ">
+
+      <section className="w-screen h-screen bg-white flex items-center justify-center flex-col pb-0 ">
         <div>
-        <span className="text-8xl font-semibold">Hacemos envíos a todo </span> <span className="text-8xl font-semibold text-[#9bef86]">México</span> <span className="text-8xl font-semibold">!!</span>
+        <span className="text-8xl font-semibold text-slate-800">Hacemos envíos a todo </span> <span className="text-8xl font-semibold text-[#9bef86]">México</span> <span className="text-8xl font-semibold text-slate-800">!!</span>
 
         </div>
-        <PackageAnimation height={400} width={350} />
+        <PackageAnimation height={500} width={450}  />
       </section>
 
       <section className="w-screen h-screen background-polka" style={{ clipPath: "polygon(0 5%, 100% 0, 100% 100%, 0% 100%)" }}>
 
       </section>
+
+</div>
+
+
 
       {/* Formulario de Contacto */}
       <ContactForm />

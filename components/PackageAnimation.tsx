@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Lottie from "lottie-react";
-import furData from "../public/animations/package_opening.json"; 
+import furData from "../public/animations/deliver.json"; 
 
 export function PackageAnimation({
   width = 300,
