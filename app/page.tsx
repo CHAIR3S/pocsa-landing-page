@@ -13,7 +13,8 @@ import { FurAnimation } from "@/components/WebMAnimation";
 import ContactForm from "@/components/ContactForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
-import { PackageAnimation } from '../components/PackageAnimation';
+import { PackageAnimation } from "../components/PackageAnimation";
+import Book from "@/components/Book";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,10 +25,9 @@ export default function PocsaLanding() {
   const imageRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const wrapper2Ref = useRef<HTMLDivElement>(null);
-  const [isProductsOpen, setIsProductsOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const productLines = [
     "Línea Metálica",
@@ -35,31 +35,28 @@ export default function PocsaLanding() {
     "Línea Escolar",
     "Línea para el Hogar",
     "Línea de Oficina",
-  ]
+  ];
 
-
-  
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+      clearTimeout(timeoutRef.current);
     }
-    setIsProductsOpen(true)
-  }
+    setIsProductsOpen(true);
+  };
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
-      setIsProductsOpen(false)
-    }, 150) // Pequeño delay para evitar parpadeos
-  }
+      setIsProductsOpen(false);
+    }, 150); // Pequeño delay para evitar parpadeos
+  };
 
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+        clearTimeout(timeoutRef.current);
       }
-    }
-  }, [])
-
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -94,14 +91,14 @@ export default function PocsaLanding() {
         "<"
       )
       .to(imageRef.current, { opacity: 0, duration: 0.2 }, 0.08)
-      // Aquí metemos la animación del texto en el mismo timeline 
+      // Aquí metemos la animación del texto en el mismo timeline
       .fromTo(
         textRef.current,
         { x: "100%" }, // empieza fuera az la derecha
         {
           x: "-100%", // termina fuera a la izquierda
           ease: "none",
-          duration: 0.3, 
+          duration: 0.3,
         },
         "<" // empalma con la animacion anterior
       )
@@ -123,7 +120,7 @@ export default function PocsaLanding() {
   return (
     <>
       {/* Navigation */}
-      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 glass-header">
+      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 backdrop-blur-xl">
         <div
           className=" space-x-2"
           style={{
@@ -143,32 +140,40 @@ export default function PocsaLanding() {
           />
         </div>
 
-
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw]">
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+        <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw] text-white/90 text-shadow-white">
+          <Link
+            href="#"
+            className=" hover:text-white transition-colors font-medium"
+          >
             HOME
           </Link>
 
           {/* Dropdown de Productos */}
-          <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button className="text-white/90 hover:text-white transition-colors font-medium flex items-center gap-1 py-2">
-              PRODUCTOS
+          <div
+            className="relative"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button className=" hover:text-white transition-colors font-medium flex items-center gap-1 py-2 ">
+              <span className="text-white/90 text-shadow-white">PRODUCTOS</span>
               <ChevronDown
-                className={`w-4 h-4 transition-all duration-200 ${isProductsOpen ? "rotate-180 text-[#9bef86]" : ""}`}
+                className={`w-4 h-4 transition-all duration-200 ${
+                  isProductsOpen ? "rotate-180 text-[#9bef86]" : ""
+                }`}
               />
             </button>
 
             {/* Dropdown Menu */}
             <div
               ref={dropdownRef}
-              className={`absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 transition-all duration-200 ease-out ${
+              className={`rounded-sm bg-white absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 transition-all duration-200 ease-out ${
                 isProductsOpen
                   ? "opacity-100 translate-y-0 pointer-events-auto"
                   : "opacity-0 -translate-y-2 pointer-events-none"
               }`}
             >
-              <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-3 overflow-hidden">
+              <div className=" backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-3 overflow-hidden">
                 {productLines.map((line, index) => (
                   <Link
                     key={index}
@@ -176,7 +181,9 @@ export default function PocsaLanding() {
                     className="block px-6 py-4 text-gray-800 hover:bg-[#9bef86]/20 hover:text-black transition-all duration-150 font-medium border-l-4 border-transparent hover:border-[#9bef86] hover:pl-8"
                     style={{
                       animationDelay: `${index * 50}ms`,
-                      animation: isProductsOpen ? "slideInFromLeft 0.3s ease-out forwards" : "none",
+                      animation: isProductsOpen
+                        ? "slideInFromLeft 0.3s ease-out forwards"
+                        : "none",
                     }}
                   >
                     {line}
@@ -186,13 +193,22 @@ export default function PocsaLanding() {
             </div>
           </div>
 
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className=" hover:text-white transition-colors font-medium"
+          >
             SERVICIOS
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className=" hover:text-white transition-colors font-medium"
+          >
             GALERÍA
           </Link>
-          <Link href="#" className="text-white/90 hover:text-white transition-colors font-medium">
+          <Link
+            href="#"
+            className=" hover:text-white transition-colors font-medium"
+          >
             CONTACTO
           </Link>
         </nav>
@@ -330,9 +346,13 @@ export default function PocsaLanding() {
       {/* <MaterialsSection /> */}
       <div className=" w-screen h-[40vh] "></div>
 
-      <section className=" w-screen h-screen" style={{ backgroundImage: "url('/images/psicologo-foto.jpg')", backgroundSize: "cover" }}>
-
-      </section>
+      <section
+        className=" w-screen h-screen"
+        style={{
+          backgroundImage: "url('/images/psicologo-foto.jpg')",
+          backgroundSize: "cover",
+        }}
+      ></section>
 
       <section className=" w-screen  bg-[#111] z-[200]">
         <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold ">
@@ -388,46 +408,58 @@ export default function PocsaLanding() {
           </div>
         </div>
       </section>
-      
+
       <div className="bg-white">
+        <section
+          className="w-screen h-screen bg-black/10 bg-blend-multiply"
+          style={{
+            clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
+            backgroundImage: 'url("/images/oficina-portada-horizontal.jpg")',
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "80% center",
+          }}
+        >
+          {/* <h3 className="text-7xl font-semibold relative top-[13%] right-[-40%] t">&lt;&lt;Comodidad y Elegancia.&gt;&gt;</h3> */}
+          <h3 className="relative top-[13%] right-[-40%] text-7xl font-semibold">
+            {/* Apertura */}
+            <span className="text-4xl align-top leading-none">«</span>
+            Comodidad y Elegancia.
+            {/* Cierre */}
+            <span className="text-4xl align-bottom leading-none">»</span>
+          </h3>
+        </section>
 
-      <section
-        className="w-screen h-screen bg-black/10 bg-blend-multiply"
-        style={{
-          clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
-          backgroundImage: 'url("/images/oficina-portada-horizontal.jpg")',
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "80% center",
-        }}
-      >
-        {/* <h3 className="text-7xl font-semibold relative top-[13%] right-[-40%] t">&lt;&lt;Comodidad y Elegancia.&gt;&gt;</h3> */}
-        <h3 className="relative top-[13%] right-[-40%] text-7xl font-semibold">
-          {/* Apertura */}
-          <span className="text-4xl align-top leading-none">«</span>
-          Comodidad y Elegancia.
-          {/* Cierre */}
-          <span className="text-4xl align-bottom leading-none">»</span>
-        </h3>
-      </section>
+        <section className="w-screen  bg-white flex items-center justify-center flex-col pt-[5vh] ">
+          <div>
+            <span className="text-8xl font-semibold text-slate-800">
+              Hacemos envíos a todo{" "}
+            </span>{" "}
+            <span className="text-8xl font-semibold text-[#9bef86]">
+              México
+            </span>{" "}
+            <span className="text-8xl font-semibold text-slate-800">!!</span>
+          </div>
+          <PackageAnimation height={500} width={450} />
+        </section>
 
-
-
-      <section className="w-screen h-screen bg-white flex items-center justify-center flex-col pb-0 ">
-        <div>
-        <span className="text-8xl font-semibold text-slate-800">Hacemos envíos a todo </span> <span className="text-8xl font-semibold text-[#9bef86]">México</span> <span className="text-8xl font-semibold text-slate-800">!!</span>
-
-        </div>
-        <PackageAnimation height={500} width={450}  />
-      </section>
-
-      <section className="w-screen h-screen background-polka" style={{ clipPath: "polygon(0 5%, 100% 0, 100% 100%, 0% 100%)" }}>
-
-      </section>
-
-</div>
-
-
+        <section
+          className="w-screen h-screen backgroun flex justify-center items-center"
+          style={{
+            clipPath: "polygon(0% 5%, 100% 0%, 100% 100%, 0% 100%)",
+            background: `
+      radial-gradient(circle at 20% 30%, #622297 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, #225797 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, #919722 0%, transparent 40%),
+      radial-gradient(circle at 30% 80%, #976222 0%, transparent 40%),
+      radial-gradient(circle at 70% 70%, #579722 0%, transparent 40%),
+      #000
+    `,
+          }}
+        >
+          <Book />
+        </section>
+      </div>
 
       {/* Formulario de Contacto */}
       <ContactForm />
@@ -437,7 +469,6 @@ export default function PocsaLanding() {
 
       {/* Footer */}
       <Footer />
-
 
       <style jsx>{`
         .glass-header {
@@ -531,6 +562,10 @@ export default function PocsaLanding() {
           mask-repeat: no-repeat;
           -webkit-mask-size: clamp(2300vh, 100%, 0vh);
           mask-size: clamp(2300vh, 100%, 0vh);
+        }
+
+        .text-shadow-white {
+          text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
         }
       `}</style>
     </>
