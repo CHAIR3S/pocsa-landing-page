@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface ProductLine {
   id: string;
@@ -14,6 +18,7 @@ interface ProductLine {
   size: "large" | "medium" | "small";
   sampleImages: string[];
 }
+
 
 const productLines: ProductLine[] = [
   {
@@ -126,6 +131,32 @@ const productLines: ProductLine[] = [
 export default function BentoGrid() {
   const [selectedLine, setSelectedLine] = useState<ProductLine | null>(null);
 
+  useEffect(() => {
+  const elements = gsap.utils.toArray(".bento-tile");
+
+  elements.forEach((tile) => {
+    gsap.fromTo(
+      tile,
+      { y: 0 },
+      {
+        y: -20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: tile,
+          start: "top bottom", // cuando entra
+          end: "bottom top",   // cuando sale
+          scrub: true,
+        },
+      }
+    );
+  });
+
+  return () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  };
+}, []);
+
+
   const openGallery = (line: ProductLine) => {
     setSelectedLine(line);
   };
@@ -141,7 +172,7 @@ export default function BentoGrid() {
         <div className="grid grid-cols-12 grid-rows-8 gap-4 h-[800px]">
           {/* Línea Metálica - Large */}
           <div
-            className="col-span-6 row-span-4 rounded-2xl cursor-pointer transition-transform hover:scale-[1.02] relative overflow-hidden group"
+            className="bento-tile col-span-6 row-span-4 rounded-2xl cursor-pointer transition-transform hover:scale-[1.02] relative overflow-hidden group"
             onClick={() => openGallery(productLines[0])}
             style={{
               backgroundImage: `url(${
