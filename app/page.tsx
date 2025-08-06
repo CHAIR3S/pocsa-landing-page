@@ -326,7 +326,7 @@ export default function PocsaLanding() {
         </section>
       </div>
 
-      <div className="h-[90vh]" />
+      <div className="h-[130vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
       <section className="relative z-30 bg-[#111]">
@@ -353,9 +353,6 @@ export default function PocsaLanding() {
           </div>
         </section>
       </section>
-
-      {/* Sección separación animación */}
-      <div className=" w-screen h-[40vh] "></div>
 
       <section
         className=" w-screen h-screen"
