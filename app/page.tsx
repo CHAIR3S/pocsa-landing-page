@@ -87,7 +87,7 @@ export default function PocsaLanding() {
       .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.2 }, "<")
       .to(
         logoMaskRef.current,
-        { maskSize: "clamp(15vh, 25%, 30vh)", duration: 0.2 },
+        { maskSize: "clamp(65vh, 45%, 30vh)", duration: 0.2 },
         "<"
       )
       .to(imageRef.current, { opacity: 0, duration: 0.2 }, 0.08)
@@ -255,13 +255,24 @@ export default function PocsaLanding() {
           <div className="relative z-10 flex flex-col items-center justify-center min-h-full px-6">
             <div className="flex flex-col items-center justify-center">
               {/* Liquid Glass Text Effect */}
-              <div ref={heroTitleRef} className="text-center mb-8">
-                <h1 className="liquid-glass-text text-6xl md:text-8xl lg:text-9xl font-bold mb-4 pr-1.5 pb-2.5">
+              <div ref={heroTitleRef} className="relative text-center mb-8 h-52 w-2xl">
+                {/* <h1 className="liquid-glass-text text-6xl md:text-8xl lg:text-9xl font-bold mb-4 pr-1.5 pb-2.5">
                   POCSA
                 </h1>
                 <h2 className="liquid-glass-text-secondary text-3xl md:text-5xl lg:text-6xl font-light mb-5">
                   MUEBLES
-                </h2>
+                </h2> */}
+
+<Image
+  src="/pocsa-letras-color.svg"
+  alt="POCSA Letras"
+  fill
+  style={{
+    objectFit: "contain",
+    filter: "drop-shadow(0 0 12px white)",
+  }}
+/>
+
               </div>
 
               {/* Subtitle */}
@@ -334,7 +345,7 @@ export default function PocsaLanding() {
           >
             <div
               ref={textRef}
-              className="absolute whitespace-nowrap text-white text-6xl font-bold top-1/2 left-0"
+              className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
               style={{ transform: "translateY(-50%)" }}
             >
               USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
@@ -343,7 +354,7 @@ export default function PocsaLanding() {
         </section>
       </section>
 
-      {/* <MaterialsSection /> */}
+      {/* Sección separación animación */}
       <div className=" w-screen h-[40vh] "></div>
 
       <section
@@ -444,7 +455,7 @@ export default function PocsaLanding() {
         </section>
 
         <section
-          className="w-screen h-screen backgroun flex justify-center items-center"
+          className="w-screen h-[120vh] backgroun flex justify-center items-center"
           style={{
             clipPath: "polygon(0% 5%, 100% 0%, 100% 100%, 0% 100%)",
             background: `
@@ -554,19 +565,20 @@ export default function PocsaLanding() {
 
         .logo-mask {
           background-color: white;
-          -webkit-mask-image: url("/logo-pocsa-color.svg");
-          mask-image: url("/logo-pocsa-color.svg");
-          -webkit-mask-position: 35%;
-          mask-position: 35%;
+          -webkit-mask-image: url("/pocsa-sin-fondo-logo-blanco.svg");
+          mask-image: url("/pocsa-sin-fondo-logo-blanco.svg");
+          -webkit-mask-position: 15%;
+          mask-position: 15%;
           -webkit-mask-repeat: no-repeat;
           mask-repeat: no-repeat;
-          -webkit-mask-size: clamp(2300vh, 100%, 0vh);
-          mask-size: clamp(2300vh, 100%, 0vh);
+          -webkit-mask-size: clamp(3200vh, 110%, 0vh);
+          mask-size: clamp(3200vh, 110%, 0vh);
         }
 
         .text-shadow-white {
           text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
         }
+
       `}</style>
     </>
   );

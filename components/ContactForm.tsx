@@ -161,11 +161,11 @@ export default function ContactForm() {
         </div>
 
         {/* Mapa */}
-        <div className="mt-16">
+        {/* <div className="mt-16">
           <div className="bg-gray-300 h-96 rounded-lg flex items-center justify-center">
             <p className="text-gray-600 text-lg">Mapa Celaya</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )
