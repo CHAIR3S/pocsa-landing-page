@@ -136,13 +136,13 @@ export default function BentoGrid() {
 
   elements.forEach((tile) => {
     gsap.fromTo(
-      tile as HTMLElement,
+      tile,
       { y: 0 },
       {
         y: -20,
         ease: "none",
         scrollTrigger: {
-          trigger: tile as HTMLElement,
+          trigger: tile,
           start: "top bottom", // cuando entra
           end: "bottom top",   // cuando sale
           scrub: true,

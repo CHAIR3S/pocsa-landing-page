@@ -16,6 +16,8 @@ import Footer from "@/components/Footer";
 import Book from "@/components/Book";
 import MelaminesAnimation from "@/components/MelaminesAnimation";
 import ShippingSection from "@/components/ShippingSection";
+import VestAnimation from "@/components/VestAnimation";
+import SawAnimation from "@/components/SawAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -442,13 +444,15 @@ style={{
 
       <ClientsCarousel />
 
-      <section
+      {/* <section
         className="w-screen h-screen "
         style={{
           backgroundImage: "url('/images/psicologo-foto.jpg')",
           backgroundSize: "cover",
         }}
-      ></section>
+      ></section> */}
+
+        <VestAnimation />
 
       <section className="w-screen h-screen bg-black flex flex-row container">
         <div className="w-1/2 h-full flex items-center justify-center">
@@ -536,6 +540,9 @@ style={{
           <Book />
         </section>
       </div>
+
+      
+      <SawAnimation />
 
       {/* Formulario de Contacto */}
       <ContactForm />
