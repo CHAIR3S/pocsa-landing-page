@@ -126,7 +126,7 @@ code, pre {
     @apply border-border outline-ring/50;
   }
   body {
-    background: #111;
+  @apply bg-black text-white;
     height: 400vh;
     overflow-x: hidden;
     overscroll-behavior: none;

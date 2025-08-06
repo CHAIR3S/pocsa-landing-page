@@ -13,8 +13,9 @@ import { FurAnimation } from "@/components/WebMAnimation";
 import ContactForm from "@/components/ContactForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
-import { PackageAnimation } from "../components/PackageAnimation";
 import Book from "@/components/Book";
+import MelaminesAnimation from "@/components/MelaminesAnimation";
+import ShippingSection from "@/components/ShippingSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,7 +28,11 @@ export default function PocsaLanding() {
   const wrapper2Ref = useRef<HTMLDivElement>(null);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const maskSectionRef = useRef<HTMLDivElement>(null);
+const psicologoSectionRef = useRef<HTMLDivElement>(null);
+  
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
 
   const productLines = [
     "Línea Metálica",
@@ -80,7 +85,9 @@ export default function PocsaLanding() {
         start: "top top",
         end: "+=200%",
         scrub: 1,
-      },
+        toggleActions: "play reverse play reverse",
+      }
+
     });
 
     tl.to(subtitleRef.current, { opacity: 0, duration: 0.1 })
@@ -96,9 +103,9 @@ export default function PocsaLanding() {
         textRef.current,
         { x: "100%" }, // empieza fuera az la derecha
         {
-          x: "-100%", // termina fuera a la izquierda
+          x: "-75%", // termina fuera a la izquierda
           ease: "none",
-          duration: 0.3,
+          duration: 0.5,
         },
         "<" // empalma con la animacion anterior
       )
@@ -107,12 +114,40 @@ export default function PocsaLanding() {
         { position: "fixed", top: "35%", left: "45%", duration: 0 },
         "<"
       )
-      .to(
-        logoMaskRef.current,
-        { autoAlpha: 0, duration: 0.1 }, //  animamos autoAlpha en vez de opacity
-        0.3
-      )
-      .to(wrapper2Ref.current, { autoAlpha: 0, duration: 0.1 }, ">");
+      // .to(
+      //   logoMaskRef.current,
+      //   { autoAlpha: 0, duration: 0.1 }, //  animamos autoAlpha en vez de opacity
+      //   0.3
+      // )
+      // .to(wrapper2Ref.current, { autoAlpha: 0, duration: 0.1 }, ">")
+      
+.to(maskSectionRef.current, {
+  clipPath: "circle(0% at 50% 100%)",
+  WebkitClipPath: "circle(0% at 50% 100%)",
+  duration: 1.2,
+  ease: "power2.inOut",
+})
+.to(
+  [wrapper2Ref.current, logoMaskRef.current],
+  {
+    opacity: 0,
+    duration: 0.6,
+    ease: "power2.inOut",
+  },
+  "<"
+)
+.to(
+  psicologoSectionRef.current,
+  {
+    opacity: 1,
+    duration: 1,
+    ease: "power2.out",
+  },
+  "<+0.3"
+);
+
+      
+      ;
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
@@ -234,10 +269,16 @@ export default function PocsaLanding() {
       </header>
 
       {/* Contenido principal con máscara */}
-      <div
-        ref={logoMaskRef}
-        className="logo-mask fixed top-0 w-full h-screen z-40"
-      >
+<div
+  ref={logoMaskRef}
+  className="logo-mask fixed top-0 w-full h-screen z-40"
+  style={{
+    clipPath: "circle(100% at 50% 100%)",
+    WebkitClipPath: "circle(100% at 50% 100%)",
+    transition: "clip-path 1s ease-in-out",
+  }}
+>
+
         <section className="relative h-full">
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
@@ -326,47 +367,69 @@ export default function PocsaLanding() {
         </section>
       </div>
 
-      <div className="h-[130vh]" />
+      <div className="h-[7vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
-      <section className="relative z-30 bg-[#111]">
-        <section className="min-h-screen p-8 flex items-center justify-center">
-          <div
-            ref={wrapper2Ref}
-            className="relative w-full max-w-3xl h-64 overflow-hidden"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
-              maskImage:
-                "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-            }}
-          >
-            <div
-              ref={textRef}
-              className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
-              style={{ transform: "translateY(-50%)" }}
-            >
-              USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
-            </div>
-          </div>
-        </section>
-      </section>
+<div
+  ref={maskSectionRef}
+  className="relative z-30 bg-black"
+  style={{
+    clipPath: "circle(100% at 50% 100%)",
+    WebkitClipPath: "circle(100% at 50% 100%)",
+    transition: "clip-path 1s ease-in-out, -webkit-clip-path 1s ease-in-out",
+  }}
+>
+  <section className="min-h-screen p-8 flex items-center justify-center">
+<div
+  ref={wrapper2Ref}
+  className="relative w-full max-w-3xl h-64 overflow-hidden"
+style={{
+  WebkitMaskImage: "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+  maskImage: "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+  WebkitMaskSize: "200% 200%",
+  maskSize: "200% 200%",
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+  transition: "mask-size 1.2s ease-in-out",
+}}
 
-      <section
-        className=" w-screen h-screen"
-        style={{
-          backgroundImage: "url('/images/psicologo-foto.jpg')",
-          backgroundSize: "cover",
-        }}
-      ></section>
+>
 
-      <section className=" w-screen  bg-[#111] z-[200]">
-        <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold ">
+      <div
+        ref={textRef}
+        className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
+        style={{ transform: "translateY(-50%)" }}
+      >
+        USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
+      </div>
+    </div>
+  </section>
+</div>
+
+      {/* sección de video */}
+
+{/* <section
+  ref={psicologoSectionRef}
+  className="w-screen h-screen"
+  style={{
+    backgroundImage: "url('/images/psicologo-foto.jpg')",
+    backgroundSize: "cover",
+    opacity: 0, // para que se revele al final
+  }}
+></section> */}
+
+<section
+  ref={psicologoSectionRef}
+  className="w-screen h-screen opacity-0" >
+<MelaminesAnimation />
+</section>
+
+
+      <section className=" w-screen  bg-black ">
+        <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold text-slate-800">
           Nuestros
         </h2>
-        <h2 className="relative top-[-8vh] left-[10vw] text-7xl font-bold">
+        <h2 className="relative top-[-8vh] left-[10vw] text-7xl font-bold text-slate-800">
           Productos
         </h2>
 
@@ -387,7 +450,7 @@ export default function PocsaLanding() {
         }}
       ></section>
 
-      <section className="w-screen h-screen bg-[#111] flex flex-row container">
+      <section className="w-screen h-screen bg-black flex flex-row container">
         <div className="w-1/2 h-full flex items-center justify-center">
           <FurAnimation width={600} height={723} />
         </div>
@@ -417,7 +480,7 @@ export default function PocsaLanding() {
         </div>
       </section>
 
-      <div className="bg-white">
+      <div className="bg-black">
         <section
           className="w-screen h-screen bg-black/10 bg-blend-multiply"
           style={{
@@ -438,8 +501,8 @@ export default function PocsaLanding() {
           </h3>
         </section>
 
-        <section className="w-screen  bg-white flex items-center justify-center flex-col pt-[5vh] ">
-          <div>
+        <section className="w-screen  bg-black flex items-center justify-center flex-col pt-[5vh] ">
+          {/* <div>
             <span className="text-8xl font-semibold text-slate-800">
               Hacemos envíos a todo{" "}
             </span>{" "}
@@ -448,7 +511,12 @@ export default function PocsaLanding() {
             </span>{" "}
             <span className="text-8xl font-semibold text-slate-800">!!</span>
           </div>
-          <PackageAnimation height={500} width={450} />
+          <PackageAnimation height={500} width={450} /> */}
+
+
+<ShippingSection />
+
+
         </section>
 
         <section
