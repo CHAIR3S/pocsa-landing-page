@@ -30,10 +30,9 @@ export default function PocsaLanding() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const maskSectionRef = useRef<HTMLDivElement>(null);
-const psicologoSectionRef = useRef<HTMLDivElement>(null);
-  
+  const psicologoSectionRef = useRef<HTMLDivElement>(null);
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
 
   const productLines = [
     "Línea Metálica",
@@ -87,8 +86,7 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
         end: "+=200%",
         scrub: 1,
         toggleActions: "play reverse play reverse",
-      }
-
+      },
     });
 
     tl.to(subtitleRef.current, { opacity: 0, duration: 0.1 })
@@ -121,34 +119,31 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
       //   0.3
       // )
       // .to(wrapper2Ref.current, { autoAlpha: 0, duration: 0.1 }, ">")
-      
-.to(maskSectionRef.current, {
-  clipPath: "circle(0% at 50% 100%)",
-  WebkitClipPath: "circle(0% at 50% 100%)",
-  duration: 1.2,
-  ease: "power2.inOut",
-})
-.to(
-  [wrapper2Ref.current, logoMaskRef.current],
-  {
-    opacity: 0,
-    duration: 0.6,
-    ease: "power2.inOut",
-  },
-  "<"
-)
-.to(
-  psicologoSectionRef.current,
-  {
-    opacity: 1,
-    duration: 1,
-    ease: "power2.out",
-  },
-  "<+0.3"
-);
 
-      
-      ;
+      .to(maskSectionRef.current, {
+        clipPath: "circle(0% at 50% 100%)",
+        WebkitClipPath: "circle(0% at 50% 100%)",
+        duration: 1.2,
+        ease: "power2.inOut",
+      })
+      .to(
+        [wrapper2Ref.current, logoMaskRef.current],
+        {
+          opacity: 0,
+          duration: 0.6,
+          ease: "power2.inOut",
+        },
+        "<"
+      )
+      .to(
+        psicologoSectionRef.current,
+        {
+          opacity: 1,
+          duration: 1,
+          ease: "power2.out",
+        },
+        "<+0.3"
+      );
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
@@ -270,16 +265,15 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
       </header>
 
       {/* Contenido principal con máscara */}
-<div
-  ref={logoMaskRef}
-  className="logo-mask fixed top-0 w-full h-screen z-40"
-  style={{
-    clipPath: "circle(100% at 50% 100%)",
-    WebkitClipPath: "circle(100% at 50% 100%)",
-    transition: "clip-path 1s ease-in-out",
-  }}
->
-
+      <div
+        ref={logoMaskRef}
+        className="logo-mask fixed top-0 w-full h-screen z-40"
+        style={{
+          clipPath: "circle(100% at 50% 100%)",
+          WebkitClipPath: "circle(100% at 50% 100%)",
+          transition: "clip-path 1s ease-in-out",
+        }}
+      >
         <section className="relative h-full">
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
@@ -297,7 +291,10 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
           <div className="relative z-10 flex flex-col items-center justify-center min-h-full px-6">
             <div className="flex flex-col items-center justify-center">
               {/* Liquid Glass Text Effect */}
-              <div ref={heroTitleRef} className="relative text-center mb-8 h-52 w-2xl">
+              <div
+                ref={heroTitleRef}
+                className="relative text-center mb-8 h-52 w-2xl"
+              >
                 {/* <h1 className="liquid-glass-text text-6xl md:text-8xl lg:text-9xl font-bold mb-4 pr-1.5 pb-2.5">
                   POCSA
                 </h1>
@@ -305,16 +302,15 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
                   MUEBLES
                 </h2> */}
 
-<Image
-  src="/pocsa-letras-color.svg"
-  alt="POCSA Letras"
-  fill
-  style={{
-    objectFit: "contain",
-    filter: "drop-shadow(0 0 12px white)",
-  }}
-/>
-
+                <Image
+                  src="/pocsa-letras-color.svg"
+                  alt="POCSA Letras"
+                  fill
+                  style={{
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 0 12px white)",
+                  }}
+                />
               </div>
 
               {/* Subtitle */}
@@ -371,45 +367,46 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
       <div className="h-[7vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
-<div
-  ref={maskSectionRef}
-  className="relative z-30 bg-black"
-  style={{
-    clipPath: "circle(100% at 50% 100%)",
-    WebkitClipPath: "circle(100% at 50% 100%)",
-    transition: "clip-path 1s ease-in-out, -webkit-clip-path 1s ease-in-out",
-  }}
->
-  <section className="min-h-screen p-8 flex items-center justify-center">
-<div
-  ref={wrapper2Ref}
-  className="relative w-full max-w-3xl h-64 overflow-hidden"
-style={{
-  WebkitMaskImage: "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
-  maskImage: "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
-  WebkitMaskSize: "200% 200%",
-  maskSize: "200% 200%",
-  WebkitMaskRepeat: "no-repeat",
-  maskRepeat: "no-repeat",
-  transition: "mask-size 1.2s ease-in-out",
-}}
-
->
-
       <div
-        ref={textRef}
-        className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
-        style={{ transform: "translateY(-50%)" }}
+        ref={maskSectionRef}
+        className="relative z-30 bg-black"
+        style={{
+          clipPath: "circle(100% at 50% 100%)",
+          WebkitClipPath: "circle(100% at 50% 100%)",
+          transition:
+            "clip-path 1s ease-in-out, -webkit-clip-path 1s ease-in-out",
+        }}
       >
-        USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
+        <section className="min-h-screen p-8 flex items-center justify-center">
+          <div
+            ref={wrapper2Ref}
+            className="relative w-full max-w-3xl h-64 overflow-hidden"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+              maskImage:
+                "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+              WebkitMaskSize: "200% 200%",
+              maskSize: "200% 200%",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              transition: "mask-size 1.2s ease-in-out",
+            }}
+          >
+            <div
+              ref={textRef}
+              className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
+              style={{ transform: "translateY(-50%)" }}
+            >
+              USTED LO IMAGINA, NOSOTROS LO HACEMOS REALIDAD
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
-  </section>
-</div>
 
       {/* sección de video */}
 
-{/* <section
+      {/* <section
   ref={psicologoSectionRef}
   className="w-screen h-screen"
   style={{
@@ -419,12 +416,12 @@ style={{
   }}
 ></section> */}
 
-<section
-  ref={psicologoSectionRef}
-  className="w-screen h-screen opacity-0" >
-<MelaminesAnimation />
-</section>
-
+      <section
+        ref={psicologoSectionRef}
+        className="w-screen h-screen opacity-0"
+      >
+        <MelaminesAnimation />
+      </section>
 
       <section className=" w-screen  bg-black ">
         <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold text-slate-800">
@@ -451,7 +448,7 @@ style={{
         }}
       ></section> */}
 
-        <VestAnimation />
+      <VestAnimation />
 
       <section className="w-screen h-screen bg-black flex flex-row container">
         <div className="w-1/2 h-full flex items-center justify-center">
@@ -516,17 +513,14 @@ style={{
           </div>
           <PackageAnimation height={500} width={450} /> */}
 
-
-<ShippingSection />
-
-
+          <ShippingSection />
         </section>
 
-<section
-  className="w-screen h-[120vh] flex justify-center items-center relative overflow-visible z-10"
-  style={{
-    clipPath: "none", 
-    background: `
+        <section
+          className="w-screen h-[120vh] flex justify-center items-center relative overflow-visible z-10"
+          style={{
+            clipPath: "none",
+            background: `
       radial-gradient(circle at 20% 30%, #622297 0%, transparent 40%),
       radial-gradient(circle at 50% 50%, #225797 0%, transparent 40%),
       radial-gradient(circle at 80% 20%, #919722 0%, transparent 40%),
@@ -534,26 +528,23 @@ style={{
       radial-gradient(circle at 70% 70%, #579722 0%, transparent 40%),
       #000
     `,
-  }}
->
-  <Book />
-</section>
-
+          }}
+        >
+          <Book />
+        </section>
       </div>
 
-      
       {/* <SawAnimation /> */}
 
-      <video width='1850' height='3000' autoPlay loop muted preload="auto">
-      <source src="/videos/saw-video/saw-video.mp4" type="video/mp4" />
-      <track
-        src="/path/to/captions.vtt"
-        kind="subtitles"
-        srcLang="en"
-        label="English"
-      />
-      Your browser does not support the video tag.
-    </video>
+      <video
+        style={{ width: "100vw", height: "auto" }}
+        autoPlay
+        loop
+        muted
+        preload="auto"
+      >
+        Your browser does not support the video tag.
+      </video>
 
       {/* Formulario de Contacto */}
       <ContactForm />
@@ -661,7 +652,6 @@ style={{
         .text-shadow-white {
           text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
         }
-
       `}</style>
     </>
   );
