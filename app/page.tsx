@@ -278,7 +278,7 @@ export default function PocsaLanding() {
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
             <Image
-              src="/images/alambrin-cover.jpg"
+              src="/images/melamine-marmol.jpg"
               alt="Modern living room interior"
               fill
               className="object-cover"
