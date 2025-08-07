@@ -24,7 +24,7 @@ useEffect(() => {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=150%",
+        end: "+=170%",
         scrub: true,
         pin: true,
         markers: true,
@@ -36,7 +36,7 @@ useEffect(() => {
       frame: frameCount - 1,
       ease: "none",
 onUpdate: () => {
-  const index = Math.min(frameCount - 1, Math.round(obj.frame * 0.8));
+  const index = Math.min(frameCount - 1, Math.round(obj.frame * 1));
   setCurrentFrame(index);
   if (imageRef.current) {
     imageRef.current.src = getFrameSrc(index);
