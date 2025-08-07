@@ -17,7 +17,6 @@ import Book from "@/components/Book";
 import MelaminesAnimation from "@/components/MelaminesAnimation";
 import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
-import SawAnimation from "@/components/SawAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -285,7 +284,7 @@ const psicologoSectionRef = useRef<HTMLDivElement>(null);
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
             <Image
-              src="/images/living-room.jpg"
+              src="/images/alambrin-cover.jpg"
               alt="Modern living room interior"
               fill
               className="object-cover"
@@ -523,11 +522,11 @@ style={{
 
         </section>
 
-        <section
-          className="w-screen h-[120vh] backgroun flex justify-center items-center"
-          style={{
-            clipPath: "polygon(0% 5%, 100% 0%, 100% 100%, 0% 100%)",
-            background: `
+<section
+  className="w-screen h-[120vh] flex justify-center items-center relative overflow-visible z-10"
+  style={{
+    clipPath: "none", 
+    background: `
       radial-gradient(circle at 20% 30%, #622297 0%, transparent 40%),
       radial-gradient(circle at 50% 50%, #225797 0%, transparent 40%),
       radial-gradient(circle at 80% 20%, #919722 0%, transparent 40%),
@@ -535,14 +534,26 @@ style={{
       radial-gradient(circle at 70% 70%, #579722 0%, transparent 40%),
       #000
     `,
-          }}
-        >
-          <Book />
-        </section>
+  }}
+>
+  <Book />
+</section>
+
       </div>
 
       
-      <SawAnimation />
+      {/* <SawAnimation /> */}
+
+      <video width='1850' height='3000' autoPlay loop muted preload="auto">
+      <source src="/videos/saw-video/saw-video.mp4" type="video/mp4" />
+      <track
+        src="/path/to/captions.vtt"
+        kind="subtitles"
+        srcLang="en"
+        label="English"
+      />
+      Your browser does not support the video tag.
+    </video>
 
       {/* Formulario de Contacto */}
       <ContactForm />

@@ -18,7 +18,7 @@ export default function SawAnimation() {
 
 useEffect(() => {
   requestAnimationFrame(() => {
-    const obj = { frame: 0 };
+    const obj = { frame: 1 };
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -61,7 +61,7 @@ useEffect(() => {
     >
       <img
         ref={imageRef}
-        src={getFrameSrc(0)}
+        src={getFrameSrc(2)}
         alt="Animación por frames"
         className="w-full h-full object-cover"
       />

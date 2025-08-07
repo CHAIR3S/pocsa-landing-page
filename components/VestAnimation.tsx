@@ -10,7 +10,7 @@ export default function VestAnimation() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const frameCount = 39; // cambia esto al total de tus imágenes
+  const frameCount = 64; // cambia esto al total de tus imágenes
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const getFrameSrc = (index: number) =>
@@ -18,13 +18,13 @@ export default function VestAnimation() {
 
 useEffect(() => {
   requestAnimationFrame(() => {
-    const obj = { frame: 0 };
+    const obj = { frame: 1. };
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=190%",
+        end: "+=150%",
         scrub: true,
         pin: true,
         markers: true,
@@ -35,14 +35,14 @@ useEffect(() => {
     tl.to(obj, {
       frame: frameCount - 1,
       ease: "none",
-      onUpdate: () => {
-        const index = Math.round(obj.frame);
-        setCurrentFrame(index);
-        if (imageRef.current) {
-          imageRef.current.src = getFrameSrc(index);
-        }
-        console.log("Frame:", index);
-      },
+onUpdate: () => {
+  const index = Math.min(frameCount - 1, Math.round(obj.frame * 0.8));
+  setCurrentFrame(index);
+  if (imageRef.current) {
+    imageRef.current.src = getFrameSrc(index);
+  }
+  console.log("Frame:", index);
+},
     });
 
     ScrollTrigger.refresh();
@@ -61,12 +61,11 @@ useEffect(() => {
     >
       <img
         ref={imageRef}
-        src={getFrameSrc(0)}
+        src={getFrameSrc(1)}
         alt="Animación por frames"
         className="w-full h-full object-cover"
       />
 
-      {console.log("Current Frame:", currentFrame)}
     </section>
   );
 }
