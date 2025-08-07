@@ -31,6 +31,7 @@ export default function PocsaLanding() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const maskSectionRef = useRef<HTMLDivElement>(null);
   const psicologoSectionRef = useRef<HTMLDivElement>(null);
+  const calidadYDurabilidadRef = useRef<HTMLHeadElement>(null);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -89,14 +90,14 @@ export default function PocsaLanding() {
       },
     });
 
-    tl.to(subtitleRef.current, { opacity: 0, duration: 0.1 })
-      .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.2 }, "<")
+    tl.to(subtitleRef.current, { opacity: 0, duration: 1.3 })
+      .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.4 }, "<")
       .to(
         logoMaskRef.current,
-        { maskSize: "clamp(65vh, 45%, 30vh)", duration: 0.2 },
+        { maskSize: "clamp(65vh, 45%, 30vh)", duration: 0.6 },
         "<"
       )
-      .to(imageRef.current, { opacity: 0, duration: 0.2 }, 0.08)
+      .to(imageRef.current, { opacity: 0, duration: 0.4 }, 0.3)
       // Aquí metemos la animación del texto en el mismo timeline
       .fromTo(
         textRef.current,
@@ -104,9 +105,9 @@ export default function PocsaLanding() {
         {
           x: "-75%", // termina fuera a la izquierda
           ease: "none",
-          duration: 0.5,
+          duration: 1.2,
         },
-        "<" // empalma con la animacion anterior
+        0.2 // empalma con la animacion anterior
       )
       .to(
         wrapper2Ref.current,
@@ -125,7 +126,8 @@ export default function PocsaLanding() {
         WebkitClipPath: "circle(0% at 50% 100%)",
         duration: 1.2,
         ease: "power2.inOut",
-      })
+      },
+      0.2)
       .to(
         [wrapper2Ref.current, logoMaskRef.current],
         {
@@ -133,7 +135,7 @@ export default function PocsaLanding() {
           duration: 0.6,
           ease: "power2.inOut",
         },
-        "<"
+        "<+0.8"
       )
       .to(
         psicologoSectionRef.current,
@@ -143,7 +145,15 @@ export default function PocsaLanding() {
           ease: "power2.out",
         },
         "<+0.3"
-      );
+      )
+      .fromTo(calidadYDurabilidadRef.current,
+        { y: "100%" }, 
+        {
+          y: "-15%", 
+          ease: "circ.inOut",
+          duration: .3,
+        },
+        2)
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
@@ -455,8 +465,8 @@ export default function PocsaLanding() {
           <FurAnimation width={600} height={723} />
         </div>
 
-        <div className="w-1/2 h-full px-[10vw] ">
-          <h3 className="relative top-[-2vh] text-7xl font-bold">
+        <div  className="w-1/2 h-full px-[10vw]">
+          <h3 ref={calidadYDurabilidadRef} className="relative top-[-2vh] text-7xl font-bold">
             Calidad y durabilidad en cada diseño
           </h3>
 
