@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import gsap from "gsap";
@@ -131,30 +131,39 @@ const productLines: ProductLine[] = [
 export default function BentoGrid() {
   const [selectedLine, setSelectedLine] = useState<ProductLine | null>(null);
 
-  useEffect(() => {
-  const elements = gsap.utils.toArray(".bento-tile");
+  
+    const imageRef = useRef<HTMLDivElement>(null);
+    
 
-  elements.forEach((tile) => {
-    gsap.fromTo(
-      tile,
-      { y: 0 },
-      {
-        y: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: tile,
-          start: "top bottom", // cuando entra
-          end: "bottom top",   // cuando sale
-          scrub: true,
-        },
-      }
-    );
+
+useEffect(() => {
+  // Aseguramos que la animación se ejecute solo cuando el componente esté montado
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: imageRef.current, // Elemento que dispara la animación
+      start: "top bottom", // Empieza cuando la parte superior del trigger llega a la parte inferior de la ventana
+      end: "bottom top", // Termina cuando la parte inferior del trigger llega a la parte superior de la ventana
+      scrub: true, // Sincroniza la animación con el scroll
+      markers: true, // Desactiva los marcadores de depuración
+    }
   });
 
+  // Animación con fromTo
+  tl.fromTo(imageRef.current, 
+    { backgroundPosition: "center 50%" }, // Valor inicial
+    { backgroundPosition: "center 20%", 
+      ease: "none",
+      duration: 0.5,
+    } // Valor final
+  );
+
+  // Limpiar la animación cuando el componente se desmonte
   return () => {
-    ScrollTrigger.getAll().forEach((t) => t.kill());
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
   };
 }, []);
+
+
 
 
   const openGallery = (line: ProductLine) => {
@@ -172,14 +181,14 @@ export default function BentoGrid() {
         <div className="grid grid-cols-12 grid-rows-8 gap-4 h-[800px]">
           {/* Línea Metálica - Large */}
           <div
-            className="bento-tile col-span-6 row-span-4 rounded-2xl cursor-pointer transition-transform hover:scale-[1.02] relative overflow-hidden group"
+            className=" col-span-6 row-span-4 rounded-2xl cursor-pointer transition-transform hover:scale-[1.02] relative overflow-hidden group"
+            ref={imageRef}
             onClick={() => openGallery(productLines[0])}
             style={{
               backgroundImage: `url(${
                 productLines[0].image || "/placeholder.svg"
               })`,
               backgroundSize: "cover",
-              backgroundPosition: "center 40%",
               backgroundRepeat: "no-repeat",
             }}
           >

@@ -17,6 +17,7 @@ import Book from "@/components/Book";
 import MelaminesAnimation from "@/components/MelaminesAnimation";
 import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
+import NuestrosProductosGradient from "@/components/NuestrosProductosGradient";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -78,6 +79,17 @@ export default function PocsaLanding() {
     // Limpia triggers antiguos
     ScrollTrigger.getAll().forEach((t) => t.kill());
 
+    
+  
+    gsap.set([logoMaskRef.current, maskSectionRef.current], {
+      clipPath: "circle(100% at 0% 0%)",
+      WebkitClipPath: "circle(100% at 0% 0%)",
+    });
+
+
+
+
+
     // Timeline único para todo el scroll
     const tl = gsap.timeline({
       ease: "power2.out",
@@ -91,6 +103,7 @@ export default function PocsaLanding() {
     });
 
     tl.to(subtitleRef.current, { opacity: 0, duration: 1.3 })
+      .to(imageRef.current, { scale: .9, duration: 1.3 }, "<")
       .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.4 }, "<")
       .to(
         logoMaskRef.current,
@@ -121,21 +134,28 @@ export default function PocsaLanding() {
       // )
       // .to(wrapper2Ref.current, { autoAlpha: 0, duration: 0.1 }, ">")
 
-      .to(maskSectionRef.current, {
-        clipPath: "circle(0% at 50% 100%)",
-        WebkitClipPath: "circle(0% at 50% 100%)",
-        duration: 1.2,
-        ease: "power2.inOut",
-      },
-      0.2)
+      tl.fromTo(
+        [logoMaskRef.current, maskSectionRef.current],
+        {
+          clipPath: "circle(200% at 0% 0%)",        // mismo centro: arriba-izquierda
+          WebkitClipPath: "circle(200% at 0% 0%)",
+        },
+        {
+          clipPath: "circle(0% at 0% 0%)",           // se cierra hacia esa esquina
+          WebkitClipPath: "circle(0% at 0% 0%)",
+          ease: "none",                              // atado al scroll por el scrub del tl
+          duration: 0.5,                               // porción del timeline (no tiempo real)
+        },
+        1.3
+      )
       .to(
-        [wrapper2Ref.current, logoMaskRef.current],
+        [wrapper2Ref.current],
         {
           opacity: 0,
-          duration: 0.6,
+          duration: 0.5,
           ease: "power2.inOut",
         },
-        "<+0.8"
+        "<"
       )
       .to(
         psicologoSectionRef.current,
@@ -281,20 +301,20 @@ export default function PocsaLanding() {
         style={{
           clipPath: "circle(100% at 50% 100%)",
           WebkitClipPath: "circle(100% at 50% 100%)",
-          transition: "clip-path 1s ease-in-out",
         }}
       >
         <section className="relative h-full">
+
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
             <Image
-              src="/images/melamine-marmol.jpg"
+              src="/images/office-cover.jpg"
               alt="Modern living room interior"
               fill
-              className="object-cover"
+              className="object-cover scale-[1.2]"
               priority
             />
-            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 bg-black/20 m-[-5vw]"/>
           </div>
 
           {/* Main Content */}
@@ -374,7 +394,7 @@ export default function PocsaLanding() {
         </section>
       </div>
 
-      <div className="h-[7vh]" />
+      <div className="h-[15vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
       <div
@@ -383,8 +403,6 @@ export default function PocsaLanding() {
         style={{
           clipPath: "circle(100% at 50% 100%)",
           WebkitClipPath: "circle(100% at 50% 100%)",
-          transition:
-            "clip-path 1s ease-in-out, -webkit-clip-path 1s ease-in-out",
         }}
       >
         <section className="min-h-screen p-8 flex items-center justify-center">
@@ -393,9 +411,9 @@ export default function PocsaLanding() {
             className="relative w-full max-w-3xl h-64 overflow-hidden"
             style={{
               WebkitMaskImage:
-                "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+                "radial-gradient(circle at 50% 100%, black 30%, transparent 95%)",
               maskImage:
-                "radial-gradient(circle at 50% 100%, black 30%, transparent 80%)",
+                "radial-gradient(circle at 50% 100%, black 30%, transparent 95%)",
               WebkitMaskSize: "200% 200%",
               maskSize: "200% 200%",
               WebkitMaskRepeat: "no-repeat",
@@ -434,12 +452,14 @@ export default function PocsaLanding() {
       </section>
 
       <section className=" w-screen  bg-black ">
-        <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold text-slate-800">
+        {/* <h2 className="relative top-[-8vh] left-[6vw] text-7xl font-bold text-slate-800">
           Nuestros
         </h2>
         <h2 className="relative top-[-8vh] left-[10vw] text-7xl font-bold text-slate-800">
           Productos
-        </h2>
+        </h2> */}
+
+        <NuestrosProductosGradient />
 
         {/* Bento grid products */}
 

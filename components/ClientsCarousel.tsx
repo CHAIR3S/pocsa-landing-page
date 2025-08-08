@@ -102,7 +102,12 @@ const ClientsCarousel = () => {
   const duplicatedLogos = [...clientLogos, ...clientLogos]
 
   return (
-    <section className="py-[16vh] bg-white" style={{clipPath: "polygon(0 3%, 100% 0, 100% 100%, 0% 100%)"}}>
+    <section
+  className="py-[16vh] bg-white relative"
+  style={{
+    clipPath: "polygon(0 3%, 100% 0, 100% 100%, 0% 100%)",
+  }}
+>
     {/* <section className="py-[16vh] bg-[#111]"> */}
       <div className="container mx-auto px-6">
         {/* Título de la sección */}
@@ -177,6 +182,16 @@ const ClientsCarousel = () => {
           animation-play-state: paused;
         }
       `}</style>
+
+
+  <div
+    className="pointer-events-none absolute bottom-0 left-0 w-full h-24"
+    style={{
+      background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, white 100%)",
+    }}
+  ></div>
+
+
     </section>
   )
 }
