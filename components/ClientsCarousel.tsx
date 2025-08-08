@@ -104,9 +104,7 @@ const ClientsCarousel = () => {
   return (
     <section
   className="py-[16vh] bg-white relative"
-  style={{
-    clipPath: "polygon(0 3%, 100% 0, 100% 100%, 0% 100%)",
-  }}
+
 >
     {/* <section className="py-[16vh] bg-[#111]"> */}
       <div className="container mx-auto px-6">

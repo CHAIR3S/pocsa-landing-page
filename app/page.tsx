@@ -13,7 +13,8 @@ import { FurAnimation } from "@/components/WebMAnimation";
 import ContactForm from "@/components/ContactForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
-import Book from "@/components/Book";
+import dynamic from "next/dynamic";
+const Book = dynamic(() => import("@/components/Book"), { ssr: false });
 import MelaminesAnimation from "@/components/MelaminesAnimation";
 import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
@@ -546,22 +547,10 @@ export default function PocsaLanding() {
           <ShippingSection />
         </section>
 
-        <section
-          className="w-screen h-[120vh] flex justify-center items-center relative overflow-visible z-10"
-          style={{
-            clipPath: "none",
-            background: `
-      radial-gradient(circle at 20% 30%, #622297 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, #225797 0%, transparent 40%),
-      radial-gradient(circle at 80% 20%, #919722 0%, transparent 40%),
-      radial-gradient(circle at 30% 80%, #976222 0%, transparent 40%),
-      radial-gradient(circle at 70% 70%, #579722 0%, transparent 40%),
-      #000
-    `,
-          }}
-        >
-          <Book />
-        </section>
+<section className="w-full flex justify-center items-center overflow-visible">
+  <Book />
+</section>
+
       </div>
 
       {/* <SawAnimation /> */}
