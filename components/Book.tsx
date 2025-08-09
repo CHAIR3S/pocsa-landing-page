@@ -8,11 +8,49 @@ import { ChevronLeft, ChevronRight, Maximize2, Plus, Minus } from "lucide-react"
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false }) as any;
 
 const PAGES = [
-  "/pdfs/catalog/2025-03-10_TNM_CELAYA_LAII-A_T3EQ_03_21030090_HURTADO_GONZÁLEZ_OSCAR_ENE-JUN25_page-0001.jpg",
-  "/pdfs/catalog/2025-03-10_TNM_CELAYA_LAII-A_T3EQ_03_21030090_HURTADO_GONZÁLEZ_OSCAR_ENE-JUN25_page-0002.jpg",
-  "/pdfs/catalog/2025-03-10_TNM_CELAYA_LAII-A_T3EQ_03_21030090_HURTADO_GONZÁLEZ_OSCAR_ENE-JUN25_page-0003.jpg",
-  "/pdfs/catalog/2025-03-10_TNM_CELAYA_LAII-A_T3EQ_03_21030090_HURTADO_GONZÁLEZ_OSCAR_ENE-JUN25_page-0004.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0001.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0002.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0003.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0004.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0005.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0006.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0007.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0008.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0009.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0010.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0011.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0012.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0013.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0014.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0015.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0016.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0017.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0018.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0019.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0020.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0021.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0022.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0023.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0024.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0025.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0026.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0027.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0028.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0029.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0030.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0031.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0032.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0033.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0034.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0035.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0036.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0037.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0038.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0039.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0040.jpg",
+  "/pdfs/catalog/CATALOGO-POCSA_page-0041.jpg"
 ];
+
 
 export default function Book() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -154,8 +192,8 @@ export default function Book() {
           <div className="flipbook-host inline-block">
             <HTMLFlipBook
               ref={bookRef}
-              width={720}
-              height={960}
+              width={717}
+              height={928}
               size="stretch"
               minWidth={560}
               maxWidth={1100}
