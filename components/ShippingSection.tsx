@@ -11,11 +11,13 @@ export default function ShippingSection() {
   }, [])
 
   return (
-    <section className="py-16 bg-black relative overflow-hidden w-full h-full">
-      {/* Efectos de fondo animados */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#77eb76]/20 to-transparent rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-l from-[#77eb76]/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <section className="py-16 bg-transparent relative overflow-hidden w-full h-full">
+      {/* ⚠️ Quitamos la capa que tapaba todo el fondo global */}
+      {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div> */}
+
+      {/* Deja solo los brillitos verdes (si quieres, con menos opacidad) */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#77eb76]/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-l from-[#77eb76]/15 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Título principal con animación */}
@@ -132,16 +134,13 @@ export default function ShippingSection() {
           0%, 100% { text-shadow: 0 0 20px #77eb76; }
           50% { text-shadow: 0 0 30px #77eb76, 0 0 40px #77eb76; }
         }
-        
         @keyframes expand {
           0% { width: 0; }
           100% { width: 8rem; }
         }
-        
         .animate-glow {
           animation: glow 2s ease-in-out infinite;
         }
-        
         .animate-expand {
           animation: expand 1s ease-out 0.5s both;
         }

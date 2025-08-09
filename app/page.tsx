@@ -34,6 +34,14 @@ export default function PocsaLanding() {
   const maskSectionRef = useRef<HTMLDivElement>(null);
   const psicologoSectionRef = useRef<HTMLDivElement>(null);
   const calidadYDurabilidadRef = useRef<HTMLHeadElement>(null);
+  const circleRef = useRef<SVGCircleElement>(null);
+
+
+  
+  const bgWrapRef = useRef<HTMLDivElement>(null);
+  const layerGreenRef = useRef<HTMLDivElement>(null);
+  const layerBlueRef  = useRef<HTMLDivElement>(null);
+  const layerBlackRef = useRef<HTMLDivElement>(null);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -77,8 +85,6 @@ export default function PocsaLanding() {
     )
       return;
 
-    // Limpia triggers antiguos
-    ScrollTrigger.getAll().forEach((t) => t.kill());
 
     
   
@@ -88,6 +94,8 @@ export default function PocsaLanding() {
     });
 
 
+    
+    if (!bgWrapRef.current) return;
 
 
 
@@ -176,11 +184,39 @@ export default function PocsaLanding() {
         },
         2)
 
+
+
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 
+
+        useEffect(() => {
+  if (!bgWrapRef.current) return;
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: bgWrapRef.current,
+      start: "top top",
+      end: "bottom bottom",   // dura todo el alto (300vh)
+      scrub: true,
+    },
+  });
+
+  // 0%→50%: verde->azul
+  tl.to(layerGreenRef.current, { opacity: 0, ease: "none", duration: 0.5 }, 0)
+    .to(layerBlueRef.current,  { opacity: 1, ease: "none", duration: 0.5 }, 0)
+    // 50%→100%: azul->negro
+    .to(layerBlueRef.current,  { opacity: 0, ease: "none", duration: 0.5 }, 0.5)
+    .to(layerBlackRef.current, { opacity: 1, ease: "none", duration: 0.5 }, 0.5);
+
+  return () => tl.scrollTrigger?.kill();
+}, []);
+
+
+
   return (
     <>
+    
       {/* Navigation */}
       <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 backdrop-blur-xl">
         <div
@@ -408,20 +444,21 @@ export default function PocsaLanding() {
       >
         <section className="min-h-screen p-8 flex items-center justify-center">
           <div
-            ref={wrapper2Ref}
-            className="relative w-full max-w-3xl h-64 overflow-hidden"
-            style={{
-              WebkitMaskImage:
-                "radial-gradient(circle at 50% 100%, black 30%, transparent 95%)",
-              maskImage:
-                "radial-gradient(circle at 50% 100%, black 30%, transparent 95%)",
-              WebkitMaskSize: "200% 200%",
-              maskSize: "200% 200%",
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-              transition: "mask-size 1.2s ease-in-out",
-            }}
-          >
+ref={wrapper2Ref}
+className="relative w-full max-w-3xl h-64 overflow-hidden"
+style={{
+  WebkitMaskImage:
+    "radial-gradient(circle at 50% 100%, black 70%, rgba(0,0,0,0.5) 85%, transparent 100%)",
+  maskImage:
+    "radial-gradient(circle at 50% 100%, black 70%, rgba(0,0,0,0.5) 85%, transparent 100%)",
+  WebkitMaskSize: "200% 200%",
+  maskSize: "200% 200%",
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+  transition: "mask-size 1.2s ease-in-out",
+}}
+>
+
             <div
               ref={textRef}
               className="absolute whitespace-nowrap text-white text-8xl font-bold top-1/2 left-0"
@@ -491,7 +528,7 @@ export default function PocsaLanding() {
             Calidad y durabilidad en cada diseño
           </h3>
 
-          <h4 className="relative left-[-5vw] py-[5vh] text-4xl text-[#c8f7bb] font-semibold ">
+          <h4 className="relative left-[-5vw] py-[5vh] text-4xl text-[#77eb76] font-semibold animate-glow">
             Muebles a tu medida, listos para inspirar.
           </h4>
 
@@ -500,7 +537,7 @@ export default function PocsaLanding() {
               Creamos muebles personalizados con materiales premium,
               certificados bajo los más altos estándares de
             </span>
-            <span className="text-2xl font-bold text-[#3b94d0]">
+            <span className="text-2xl font-bold text-[#3b94d0] animate-">
               {" "}
               Marca Guanajuato
             </span>
@@ -516,7 +553,7 @@ export default function PocsaLanding() {
           className="w-screen h-screen bg-black/10 bg-blend-multiply"
           style={{
             clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
-            backgroundImage: 'url("/images/oficina-portada-horizontal.jpg")',
+            backgroundImage: 'url("/images/office-hd.png")',
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "80% center",
@@ -532,24 +569,54 @@ export default function PocsaLanding() {
           </h3>
         </section>
 
-        <section className="w-screen  bg-black flex items-center justify-center flex-col pt-[5vh] ">
-          {/* <div>
-            <span className="text-8xl font-semibold text-slate-800">
-              Hacemos envíos a todo{" "}
-            </span>{" "}
-            <span className="text-8xl font-semibold text-[#9bef86]">
-              México
-            </span>{" "}
-            <span className="text-8xl font-semibold text-slate-800">!!</span>
-          </div>
-          <PackageAnimation height={500} width={450} /> */}
 
-          <ShippingSection />
-        </section>
 
-<section className="w-full flex justify-center items-center overflow-visible">
-  <Book />
+
+{/* === WRAPPER 300vh con fondo que cambia por scroll === */}
+<section ref={bgWrapRef} className="relative w-screen min-h-[300vh] overflow-visible">
+  {/* Capas de fondo (no bloquean eventos) */}
+  <div className="absolute inset-0 z-0 pointer-events-none h-full">
+    {/* Capa 1: negro con brillo verde (inicio) */}
+    <div
+      ref={layerGreenRef}
+      className="absolute inset-0"
+      style={{
+        background: `
+          radial-gradient(800px 400px at 50% 12%, rgba(155,239,134,0.20), rgba(155,239,134,0) 60%),
+          linear-gradient(180deg, #0b0b0f 0%, #0b0b0f 100%)
+        `,
+        opacity: 1,
+      }}
+    />
+    {/* Capa 2: azul #303490 (mitad) */}
+    <div
+      ref={layerBlueRef}
+      className="absolute inset-0"
+      style={{ background: `linear-gradient(180deg, #303490 0%, #303490 100%)`, opacity: 0 }}
+    />
+    {/* Capa 3: negro (final) */}
+    <div
+      ref={layerBlackRef}
+      className="absolute inset-0"
+      style={{ background: "#000000", opacity: 0 }}
+    />
+  </div>
+
+  {/* Contenido encima del fondo */}
+  <div className="relative z-10">
+    <section className="w-screen bg-transparent flex items-center justify-center flex-col pt-[5vh] min-h-[140vh]">
+      <ShippingSection />
+    </section>
+
+    <section className="w-full bg-transparent flex justify-center items-center overflow-visible min-h-[160vh]">
+      <Book />
+    </section>
+  </div>
 </section>
+
+
+
+
 
       </div>
 
@@ -672,6 +739,12 @@ export default function PocsaLanding() {
         .text-shadow-white {
           text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
         }
+
+        
+        .animate-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+
       `}</style>
     </>
   );
