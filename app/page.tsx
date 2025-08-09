@@ -47,11 +47,12 @@ const parallaxSecRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const productLines = [
-    "Línea Metálica",
-    "Línea de Almacenamiento",
+    "Islas",
     "Línea Escolar",
     "Línea para el Hogar",
-    "Línea de Oficina",
+    "Módulos Ejecutivos",
+    "Mesas de Juntas",
+    "Recepciones"
   ];
 
   const handleMouseEnter = () => {
@@ -326,13 +327,7 @@ const parallaxSecRef = useRef<HTMLDivElement>(null);
             href="#"
             className=" hover:text-white transition-colors font-medium"
           >
-            SERVICIOS
-          </Link>
-          <Link
-            href="#"
-            className=" hover:text-white transition-colors font-medium"
-          >
-            GALERÍA
+            CATÁLOGO
           </Link>
           <Link
             href="#"

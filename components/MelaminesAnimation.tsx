@@ -27,7 +27,7 @@ useEffect(() => {
         end: "+=190%",
         scrub: true,
         pin: true,
-        markers: true,
+        // markers: true,
         pinSpacing: true,
       },
     });

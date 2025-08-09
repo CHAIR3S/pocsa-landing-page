@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo, useCallback, useLayoutEffect } from "react";
+import { useRef, useState, useMemo, useCallback, useLayoutEffect, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Maximize2, Plus, Minus } from "lucide-react";
@@ -48,17 +48,31 @@ const PAGES = [
   "/pdfs/catalog/CATALOGO-POCSA_page-0038.jpg",
   "/pdfs/catalog/CATALOGO-POCSA_page-0039.jpg",
   "/pdfs/catalog/CATALOGO-POCSA_page-0040.jpg",
-  "/pdfs/catalog/CATALOGO-POCSA_page-0041.jpg"
+  "/pdfs/catalog/CATALOGO-POCSA_page-0041.jpg",
 ];
-
 
 export default function Book() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const bookRef = useRef<any>(null);
 
-  const [leftPage, setLeftPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const total = PAGES.length;
-  const totalSpreads = useMemo(() => Math.max(1, Math.ceil(total / 2)), [total]);
+
+  // fullscreen
+  const [isFs, setIsFs] = useState(false);
+  useEffect(() => {
+    const onFs = () => {
+      const active = !!document.fullscreenElement;
+      setIsFs(active);
+      // re-medimos para recentrar y permitir mayor zoom/área
+      setTimeout(() => measure(), 0);
+    };
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
+  }, []);
+
+  // spreads con portada individual
+  const totalSpreads = useMemo(() => 1 + Math.ceil((total - 1) / 2), [total]);
 
   // Zoom + pan
   const [zoom, setZoom] = useState(1);
@@ -66,6 +80,16 @@ export default function Book() {
   const [ty, setTy] = useState(0);
   const drag = useRef<{ sx: number; sy: number; ox: number; oy: number } | null>(null);
   const dims = useRef<{ vw: number; vh: number; cw: number; ch: number }>({ vw: 0, vh: 0, cw: 0, ch: 0 });
+
+  const clampTranslate = (nx: number, ny: number, z: number, recenter = false) => {
+    const { vw, vh, cw, ch } = dims.current;
+    const maxX = Math.max(0, (cw * z - vw) / 2);
+    const maxY = Math.max(0, (ch * z - vh) / 2);
+    const clampedX = recenter ? 0 : Math.min(maxX, Math.max(-maxX, nx));
+    const clampedY = recenter ? 0 : Math.min(maxY, Math.max(-maxY, ny));
+    setTx(clampedX);
+    setTy(clampedY);
+  };
 
   const measure = useCallback(() => {
     const v = wrapRef.current;
@@ -84,18 +108,8 @@ export default function Book() {
     return () => ro.disconnect();
   }, [measure]);
 
-  const clampTranslate = (nx: number, ny: number, z: number, recenter = false) => {
-    const { vw, vh, cw, ch } = dims.current;
-    const maxX = Math.max(0, (cw * z - vw) / 2);
-    const maxY = Math.max(0, (ch * z - vh) / 2);
-    const clampedX = recenter ? 0 : Math.min(maxX, Math.max(-maxX, nx));
-    const clampedY = recenter ? 0 : Math.min(maxY, Math.max(-maxY, ny));
-    setTx(clampedX);
-    setTy(clampedY);
-  };
-
   const changeZoom = (z: number) => {
-    const newZ = Math.min(2.2, Math.max(1, z));
+    const newZ = Math.min(isFs ? 2.6 : 2.2, Math.max(1, z));
     setZoom(newZ);
     clampTranslate(tx, ty, newZ, newZ === 1);
   };
@@ -118,40 +132,53 @@ export default function Book() {
   // Navegación
   const flipPrev = useCallback(() => bookRef.current?.pageFlip?.()?.flipPrev?.(), []);
   const flipNext = useCallback(() => bookRef.current?.pageFlip?.()?.flipNext?.(), []);
+
   const goToSpread = (s: number) => {
     const spread = Math.max(0, Math.min(s, totalSpreads - 1));
-    const leftIndex = spread * 2;
-    bookRef.current?.pageFlip?.()?.flip?.(leftIndex);
+    if (spread === 0) {
+      bookRef.current?.pageFlip?.()?.flip?.(0);
+    } else {
+      const leftIndex = (spread - 1) * 2 + 1;
+      bookRef.current?.pageFlip?.()?.flip?.(leftIndex);
+    }
   };
+
   const onFlip = (e: any) => {
     const p = Number(e?.data ?? 0);
-    setLeftPage(p % 2 === 0 ? p : p - 1);
+    setCurrentPage(p);
   };
 
   const toggleFullscreen = async () => {
-    if (!document.fullscreenElement) await wrapRef.current?.requestFullscreen?.();
-    else await document.exitFullscreen();
+    if (!document.fullscreenElement) {
+      await wrapRef.current?.requestFullscreen?.();
+    } else {
+      await document.exitFullscreen();
+    }
   };
 
-  const leftNum = leftPage + 1;
-  const rightNum = Math.min(leftPage + 2, total);
-
-  const spreadIndex = Math.floor(leftPage / 2);
+  // numeración y progreso
+  const isCover = currentPage === 0;
+  const visibleLeft = isCover ? 0 : (currentPage % 2 === 0 ? currentPage - 1 : currentPage);
+  const leftNum = isCover ? 1 : visibleLeft + 1;
+  const rightNum = isCover ? 1 : Math.min(visibleLeft + 2, total);
+  const spreadIndex = isCover ? 0 : 1 + Math.floor((visibleLeft - 1) / 2);
   const pct = totalSpreads > 1 ? (spreadIndex / (totalSpreads - 1)) * 100 : 0;
+
+  // tamaños más grandes cuando está en fullscreen
+  const containerWidth = isFs ? "min(96vw, 2000px)" : "min(94vw, 1400px)";
+  const containerHeight = isFs ? "min(96vh, 1400px)" : "min(88vh, 1000px)";
+  const maxW = isFs ? 1800 : 1100;
+  const maxH = isFs ? 2200 : 1500;
 
   return (
     <div className="w-full flex flex-col items-center">
-      {/* CONTENEDOR PRINCIPAL CENTRAL, MÁS GRANDE */}
+      {/* CONTENEDOR PRINCIPAL */}
       <div
         ref={wrapRef}
         className="relative grid place-items-center overflow-hidden rounded-2xl shadow-2xl bg-transparent"
-        style={{
-          width: "min(1400px, 94vw)",
-          height: "min(88vh, 1000px)",
-          marginInline: "auto",
-        }}
+        style={{ width: containerWidth, height: containerHeight, marginInline: "auto" }}
       >
-        {/* ✅ Capa de gradiente PROPIA detrás del libro (no depende del wrapper externo) */}
+        {/* Fondo decorativo */}
         <div
           className="absolute inset-0 -z-10 pointer-events-none rounded-2xl"
           style={{
@@ -177,13 +204,10 @@ export default function Book() {
           <ChevronLeft className="w-8 h-8" />
         </button>
 
-        {/* Capa zoom + libro (centrado real) */}
+        {/* Zoom + libro */}
         <div
           className="will-change-transform"
-          style={{
-            transform: `translate(${tx}px, ${ty}px) scale(${zoom})`,
-            transformOrigin: "center center",
-          }}
+          style={{ transform: `translate(${tx}px, ${ty}px) scale(${zoom})`, transformOrigin: "center center" }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -196,10 +220,10 @@ export default function Book() {
               height={928}
               size="stretch"
               minWidth={560}
-              maxWidth={1100}
+              maxWidth={maxW}          // ✅ más grande en fullscreen
               minHeight={720}
-              maxHeight={1500}
-              showCover={false}
+              maxHeight={maxH}         // ✅ más grande en fullscreen
+              showCover={true}         // ✅ portada sola
               usePortrait={false}
               mobileScrollSupport
               maxShadowOpacity={0.45}
@@ -209,21 +233,38 @@ export default function Book() {
               onFlip={onFlip}
               onInit={() => setTimeout(measure, 0)}
             >
-              {PAGES.map((src, i) => (
-                <div
-                  key={i}
-                  className="relative w-[720px] h-[960px] bg-white rounded-2xl overflow-hidden shadow-xl"
-                >
-                  <Image
-                    src={src}
-                    alt={`Página ${i + 1}`}
-                    fill
-                    sizes="720px"
-                    className="object-contain"
-                    priority={i === 0}
-                  />
-                </div>
-              ))}
+              {PAGES.map((src, i) => {
+                const isHard = i === 0 || i === PAGES.length - 1;
+
+                // ✅ SOLO esquinas EXTERNAS redondeadas:
+                // - Portada (0) y contraportada (última): redondeadas completas (es todo externo).
+                // - Interior:
+                //    * Páginas impares (1,3,5...) son izquierda -> rounded-l-2xl
+                //    * Páginas pares   (2,4,6...) son derecha  -> rounded-r-2xl
+                let cornerClass =
+                  i === 0 || i === PAGES.length - 1
+                    ? "rounded-2xl"
+                    : i % 2 === 1
+                    ? "rounded-l-2xl"
+                    : "rounded-r-2xl";
+
+                return (
+                  <div
+                    key={i}
+                    data-density={isHard ? "hard" : "soft"}
+                    className={`relative w-[720px] h-[960px] bg-white ${cornerClass} overflow-hidden shadow-xl`}
+                  >
+                    <Image
+                      src={src}
+                      alt={`Página ${i + 1}`}
+                      fill
+                      sizes="720px"
+                      className="object-contain"
+                      priority={i === 0}
+                    />
+                  </div>
+                );
+              })}
             </HTMLFlipBook>
           </div>
         </div>
@@ -239,13 +280,12 @@ export default function Book() {
         </button>
       </div>
 
-      {/* BARRA DE CONTROL – MÁS GRANDE + PROGRESO VERDE */}
+      {/* BARRA DE CONTROL */}
       <div className="mt-4 w-[min(1400px,94vw)] rounded-xl bg-[#1c1c1c] text-white px-4 py-3 flex items-center gap-4">
         <div className="text-sm tabular-nums whitespace-nowrap">
-          {leftNum}-{rightNum} / {total}
+          {leftNum === rightNum ? `${leftNum}` : `${leftNum}-${rightNum}`} / {total}
         </div>
 
-        {/* Slider por spreads con track verde del progreso */}
         <input
           type="range"
           min={0}
@@ -254,9 +294,7 @@ export default function Book() {
           value={spreadIndex}
           onChange={(e) => goToSpread(Number(e.target.value))}
           className="flex-1 h-2 rounded-full appearance-none bg-transparent"
-          style={{
-            background: `linear-gradient(to right, #22c55e ${pct}%, #3a3a3a ${pct}%)`,
-          }}
+          style={{ background: `linear-gradient(to right, #22c55e ${pct}%, #3a3a3a ${pct}%)` }}
         />
         <style jsx>{`
           input[type="range"]::-webkit-slider-runnable-track {
@@ -287,15 +325,14 @@ export default function Book() {
           }
         `}</style>
 
-        {/* Zoom */}
         <div className="flex items-center gap-2">
           <button onClick={() => changeZoom(zoom - 0.1)} className="p-2 rounded hover:bg-white/10" title="Zoom out">
-            <Minus className="w-5 h-5" />
+            <Plus className="w-5 h-5 rotate-45" />
           </button>
           <input
             type="range"
             min={1}
-            max={2.2}
+            max={isFs ? 2.6 : 2.2}
             step={0.05}
             value={zoom}
             onChange={(e) => changeZoom(Number(e.target.value))}
@@ -306,7 +343,6 @@ export default function Book() {
           </button>
         </div>
 
-        {/* Pantalla completa */}
         <button onClick={toggleFullscreen} className="p-2 rounded hover:bg-white/10" title="Pantalla completa">
           <Maximize2 className="w-5 h-5" />
         </button>
