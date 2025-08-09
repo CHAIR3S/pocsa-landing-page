@@ -155,8 +155,7 @@ function MediaMini({ item }: { item: MediaItem }) {
 // ---------------------- Componente ----------------------
 export default function ClientesYProyectos() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const greenRef = useRef<HTMLDivElement>(null)
-  const darkRef = useRef<HTMLDivElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
 
   const duplicatedLogos = [...clientLogos, ...clientLogos]
 
@@ -203,15 +202,13 @@ export default function ClientesYProyectos() {
     return () => window.removeEventListener("keydown", onKey)
   }, [abierto, siguiente, anterior, cerrarGaleria])
 
-  // Gradiente scroll-reactivo (blanco → verde → negro)
+  // Gradiente scroll-reactivo (blanco → verdes → negro) en UNA sola capa
   useEffect(() => {
     const section = sectionRef.current
-    const green = greenRef.current
-    const dark = darkRef.current
-    if (!section || !green || !dark) return
+    const bg = bgRef.current
+    if (!section || !bg) return
 
-    gsap.set(green, { opacity: 0, backgroundPosition: "0% 0%" })
-    gsap.set(dark, { opacity: 0, backgroundPosition: "0% 0%" })
+    gsap.set(bg, { backgroundPosition: "0% 0%" })
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -223,10 +220,8 @@ export default function ClientesYProyectos() {
       defaults: { ease: "none" },
     })
 
-    tl.to(green, { opacity: 1 }, 0.12)
-      .to(green, { backgroundPosition: "0% 100%" }, 0)
-      .to(dark, { opacity: 1 }, 0.66)
-      .to(dark, { backgroundPosition: "0% 100%" }, 0)
+    // Mueve el gradient verticalmente
+    tl.to(bg, { backgroundPosition: "0% 100%" }, 0)
 
     return () => {
       tl.kill()
@@ -238,27 +233,23 @@ export default function ClientesYProyectos() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "white" }} // base
+      style={{ background: "#ffffff" }} // base blanca (como querías)
     >
-      {/* Capas del gradiente */}
+      {/* Capa única del gradiente con sangrado 1px para evitar seams */}
       <div
-        ref={greenRef}
+        ref={bgRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute -inset-px"
         style={{
-          background: "linear-gradient(180deg, #72e058 0%, #3fa45a 35%, #14532d 100%)",
-          backgroundSize: "100% 250%",
-          willChange: "opacity, background-position",
-        }}
-      />
-      <div
-        ref={darkRef}
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: "linear-gradient(180deg, #0a3a1e 0%, #000000 80%)",
-          backgroundSize: "100% 250%",
-          willChange: "opacity, background-position",
+          // Blanco → verdes → negro en un solo gradient alto
+          background:
+            "linear-gradient(180deg, #ffffff 0%, #f6fff6 8%, #e9ffe9 12%, #72e058 25%, #3fa45a 45%, #14532d 60%, #0a3a1e 75%, #000000 100%)",
+          backgroundSize: "100% 300%",
+          backgroundPosition: "0% 0%",
+          backgroundRepeat: "no-repeat",
+          willChange: "background-position",
+          backfaceVisibility: "hidden",
+          transform: "translateZ(0)",
         }}
       />
 
@@ -273,25 +264,27 @@ export default function ClientesYProyectos() {
 
         <div className="relative overflow-hidden">
           {/* Fades laterales (inician blancos) */}
-          <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="pointer-events-none absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10" />
 
           <div
-            className="flex animate-scroll hover:pause-animation"
-            style={{ width: `${[...clientLogos, ...clientLogos].length * 250}px` }}
+            className="flex animate-scroll hover:pause-animation will-change-transform"
+            style={{ width: `${duplicatedLogos.length * 250}px`, transform: "translate3d(0,0,0)" }}
           >
-            {[...clientLogos, ...clientLogos].map((logo, index) => (
+            {duplicatedLogos.map((logo, index) => (
               <div
                 key={`${logo.id}-${index}`}
-                className="flex-shrink-0 w-[250px] h-[120px] flex items-center justify-center px-8"
+                className="flex-shrink-0 w-[250px] h-[120px] flex items-center justify-center"
               >
-                <Image
-                  src={logo.src}
-                  alt={logo.name}
-                  width={logo.width}
-                  height={logo.height}
-                  className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity"
-                />
+                <div className="px-8">
+                  <Image
+                    src={logo.src}
+                    alt={logo.name}
+                    width={logo.width}
+                    height={logo.height}
+                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -306,13 +299,13 @@ export default function ClientesYProyectos() {
       <div className="relative z-10 w-full bg-transparent">
         <div className="mx-auto max-w-6xl px-4 md:px-6 py-12 md:py-16">
           <div className="mb-10 md:mb-14 text-center">
-            <div className="inline-block rounded-full bg-black px-3 py-1 text-xs md:text-sm">
+            <div className="inline-block rounded-full bg-black px-3 py-1 text-xs md:text-sm text-white">
               Proyectos terminados
             </div>
             <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight">
               Diseño a medida que se siente en casa
             </h2>
-            <p className="mt-2 text-gray-600">Selección breve y visual. Toca una imagen para ampliarla.</p>
+            <p className="mt-2 text-gray-100/90">Selección breve y visual. Toca una imagen para ampliarla.</p>
           </div>
 
           <div className="space-y-14 md:space-y-20">
@@ -379,8 +372,8 @@ export default function ClientesYProyectos() {
 
                   {/* Texto */}
                   <div className={invert ? "md:order-1" : ""}>
-                    <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">{p.titulo}</h3>
-                    <p className="mt-3 text-white text-base leading-relaxed">{p.descripcion}</p>
+                    <h3 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">{p.titulo}</h3>
+                    <p className="mt-3 text-white/90 text-base leading-relaxed">{p.descripcion}</p>
                   </div>
                 </div>
               )
@@ -474,6 +467,11 @@ export default function ClientesYProyectos() {
           </div>
         </div>
       )}
+
+
+
+
+
     </section>
   )
 }
