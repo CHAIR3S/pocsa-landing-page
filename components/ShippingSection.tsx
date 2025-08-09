@@ -12,10 +12,23 @@ export default function ShippingSection() {
 
   return (
     <section className="py-16 bg-transparent relative overflow-hidden w-full h-full">
-      {/* ⚠️ Quitamos la capa que tapaba todo el fondo global */}
-      {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div> */}
+      {/* ✅ Capa de gradiente PROPIA que no depende del fondo global */}
+      <div
+        className="absolute inset-0 -z-10 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(900px 480px at 18% 28%, rgba(119,235,118,0.18), rgba(119,235,118,0) 62%),
+            radial-gradient(760px 420px at 82% 76%, rgba(48,52,144,0.22), rgba(48,52,144,0) 60%),
+            linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.55))
+          `,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'auto, auto, cover',
+          backgroundPosition: '18% 28%, 82% 76%, center',
+          filter: 'saturate(1.04) brightness(1.02)',
+        }}
+      />
 
-      {/* Deja solo los brillitos verdes (si quieres, con menos opacidad) */}
+      {/* Brillos verdes extra (si quieres mantenerlos) */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-[#77eb76]/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-l from-[#77eb76]/15 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
       

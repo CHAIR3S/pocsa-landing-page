@@ -98,7 +98,6 @@ export default function Book() {
   const leftNum = leftPage + 1;
   const rightNum = Math.min(leftPage + 2, total);
 
-  // % para pintar de verde el progreso ya recorrido
   const spreadIndex = Math.floor(leftPage / 2);
   const pct = totalSpreads > 1 ? (spreadIndex / (totalSpreads - 1)) * 100 : 0;
 
@@ -107,13 +106,29 @@ export default function Book() {
       {/* CONTENEDOR PRINCIPAL CENTRAL, MÁS GRANDE */}
       <div
         ref={wrapRef}
-        className="relative grid place-items-center overflow-hidden rounded-2xl shadow-2xl bg-[#0f0f0f]/40 backdrop-blur"
+        className="relative grid place-items-center overflow-hidden rounded-2xl shadow-2xl bg-transparent"
         style={{
           width: "min(1400px, 94vw)",
           height: "min(88vh, 1000px)",
           marginInline: "auto",
         }}
       >
+        {/* ✅ Capa de gradiente PROPIA detrás del libro (no depende del wrapper externo) */}
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none rounded-2xl"
+          style={{
+            background: `
+              radial-gradient(980px 520px at 24% 30%, rgba(119,235,118,0.20), rgba(119,235,118,0) 62%),
+              radial-gradient(880px 480px at 76% 70%, rgba(59,148,208,0.20), rgba(59,148,208,0) 62%),
+              linear-gradient(180deg, rgba(0,0,0,0.50), rgba(0,0,0,0.50))
+            `,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "auto, auto, cover",
+            backgroundPosition: "24% 30%, 76% 70%, center",
+            filter: "saturate(1.03) brightness(1.01)",
+          }}
+        />
+
         {/* Flecha izquierda */}
         <button
           type="button"
@@ -139,7 +154,6 @@ export default function Book() {
           <div className="flipbook-host inline-block">
             <HTMLFlipBook
               ref={bookRef}
-              // tamaños más grandes
               width={720}
               height={960}
               size="stretch"
@@ -203,11 +217,9 @@ export default function Book() {
           onChange={(e) => goToSpread(Number(e.target.value))}
           className="flex-1 h-2 rounded-full appearance-none bg-transparent"
           style={{
-            // track "pintado" a la izquierda en verde y a la derecha oscuro
             background: `linear-gradient(to right, #22c55e ${pct}%, #3a3a3a ${pct}%)`,
           }}
         />
-        {/* estilos del thumb nativo */}
         <style jsx>{`
           input[type="range"]::-webkit-slider-runnable-track {
             height: 8px;
@@ -256,49 +268,10 @@ export default function Book() {
           </button>
         </div>
 
-        {/* Extras */}
+        {/* Pantalla completa */}
         <button onClick={toggleFullscreen} className="p-2 rounded hover:bg-white/10" title="Pantalla completa">
           <Maximize2 className="w-5 h-5" />
         </button>
-      </div>
-    </div>
-  );
-}
-
-/** Miniaturas */
-function Thumbs({
-  pages,
-  activeLeft,
-  onPick,
-}: {
-  pages: string[];
-  activeLeft: number;
-  onPick: (i: number) => void;
-}) {
-  return (
-    <div className="hidden md:flex items-center gap-2">
-      <div className="flex gap-2">
-        {pages
-          .slice(Math.max(0, activeLeft - 2), Math.min(pages.length, activeLeft + 4))
-          .map((src, idx) => {
-            const realIndex = Math.max(0, activeLeft - 2) + idx;
-            const active = realIndex === activeLeft || realIndex === activeLeft + 1;
-            return (
-              <button
-                key={src}
-                onClick={() => onPick(realIndex)}
-                className={`relative w-16 h-24 overflow-hidden rounded-lg transition 
-                ${active ? "ring-2 ring-white" : "ring-1 ring-white/20 hover:ring-white/50"} 
-                hover:scale-105 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,.06),rgba(255,255,255,.02))] shadow`}
-                title={`Ir a página ${realIndex + 1}`}
-              >
-                <Image src={src} alt={`Pág ${realIndex + 1}`} fill sizes="64px" className="object-cover" />
-                <span className="absolute bottom-1 right-1 text-[10px] bg-black/60 px-1 rounded">
-                  {realIndex + 1}
-                </span>
-              </button>
-            );
-          })}
       </div>
     </div>
   );

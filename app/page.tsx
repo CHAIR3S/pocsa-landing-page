@@ -604,33 +604,6 @@ style={{
 
 {/* === WRAPPER 300vh con fondo que cambia por scroll === */}
 <section ref={bgWrapRef} className="relative w-screen min-h-[300vh] overflow-visible">
-  {/* Capas de fondo (no bloquean eventos) */}
-  <div className="absolute inset-0 z-0 pointer-events-none h-full">
-    {/* Capa 1: negro con brillo verde (inicio) */}
-    <div
-      ref={layerGreenRef}
-      className="absolute inset-0"
-      style={{
-        background: `
-          radial-gradient(800px 400px at 50% 12%, rgba(155,239,134,0.20), rgba(155,239,134,0) 60%),
-          linear-gradient(180deg, #0b0b0f 0%, #0b0b0f 100%)
-        `,
-        opacity: 1,
-      }}
-    />
-    {/* Capa 2: azul #303490 (mitad) */}
-    <div
-      ref={layerBlueRef}
-      className="absolute inset-0"
-      style={{ background: `linear-gradient(180deg, #303490 0%, #303490 100%)`, opacity: 0 }}
-    />
-    {/* Capa 3: negro (final) */}
-    <div
-      ref={layerBlackRef}
-      className="absolute inset-0"
-      style={{ background: "#000000", opacity: 0 }}
-    />
-  </div>
 
   {/* Contenido encima del fondo */}
   <div className="relative z-10">
