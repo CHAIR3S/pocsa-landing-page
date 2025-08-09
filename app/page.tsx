@@ -34,7 +34,8 @@ export default function PocsaLanding() {
   const maskSectionRef = useRef<HTMLDivElement>(null);
   const psicologoSectionRef = useRef<HTMLDivElement>(null);
   const calidadYDurabilidadRef = useRef<HTMLHeadElement>(null);
-  const circleRef = useRef<SVGCircleElement>(null);
+const parallaxSecRef = useRef<HTMLDivElement>(null);
+
 
 
   
@@ -188,6 +189,36 @@ export default function PocsaLanding() {
 
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
+
+
+  useEffect(() => {
+  const el = parallaxSecRef.current;
+  if (!el) return;
+
+  const baseY = 50;   // 50% = centrado
+  const travel = 18;  // ajusta 10–25 para más/menos efecto
+
+  const tween = gsap.fromTo(
+    el,
+    { backgroundPosition: `80% ${baseY + travel / 2}%` },
+    {
+      backgroundPosition: `80% ${baseY - travel / 2}%`,
+      ease: "none",
+      scrollTrigger: {
+        trigger: el,
+        start: "top bottom",  // empieza al entrar al viewport
+        end: "bottom top",    // termina al salir por arriba
+        scrub: true,
+      },
+    }
+  );
+
+  return () => {
+    tween.scrollTrigger?.kill();
+    tween.kill();
+  };
+}, []);
+
 
 
         useEffect(() => {
@@ -549,25 +580,24 @@ style={{
       </section>
 
       <div className="bg-black">
-        <section
-          className="w-screen h-screen bg-black/10 bg-blend-multiply"
-          style={{
-            clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
-            backgroundImage: 'url("/images/office-hd.png")',
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            backgroundPosition: "80% center",
-          }}
-        >
-          {/* <h3 className="text-7xl font-semibold relative top-[13%] right-[-40%] t">&lt;&lt;Comodidad y Elegancia.&gt;&gt;</h3> */}
-          <h3 className="relative top-[13%] right-[-40%] text-7xl font-semibold">
-            {/* Apertura */}
-            <span className="text-4xl align-top leading-none">«</span>
-            Comodidad y Elegancia.
-            {/* Cierre */}
-            <span className="text-4xl align-bottom leading-none">»</span>
-          </h3>
-        </section>
+  <section
+    ref={parallaxSecRef}
+    className="w-screen h-screen bg-black/10 bg-blend-multiply"
+    style={{
+      clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
+      backgroundImage: 'url("/images/office-hd.png")',
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      backgroundPosition: "80% 50%", // usa % en Y
+      willChange: "background-position", // para performance
+    }}
+  >
+    <h3 className="relative top-[13%] right-[-40%] text-7xl font-semibold">
+      <span className="text-4xl align-top leading-none">«</span>
+      Comodidad y Elegancia.
+      <span className="text-4xl align-bottom leading-none">»</span>
+    </h3>
+  </section>
 
 
 
