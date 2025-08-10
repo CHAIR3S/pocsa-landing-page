@@ -3,24 +3,13 @@
 import Image from "next/image"
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import gsap from "gsap"
-import ScrollTrigger from "gsap/ScrollTrigger" // ✅ default import correcto
+import ScrollTrigger from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
 // ---------------------- Tipos ----------------------
-type MediaItem = {
-  type: "image" | "video"
-  src: string
-  alt: string
-  poster?: string
-}
-
-type Proyecto = {
-  id: string
-  titulo: string
-  descripcion: string
-  imagenes: MediaItem[]
-}
+type MediaItem = { type: "image" | "video"; src: string; alt: string; poster?: string }
+type Proyecto = { id: string; titulo: string; descripcion: string; imagenes: MediaItem[] }
 
 // ---------------------- Datos ----------------------
 const proyectos: Proyecto[] = [
@@ -29,21 +18,9 @@ const proyectos: Proyecto[] = [
     titulo: "Sala Modular en Nogal",
     descripcion: "Sistema cálido y funcional que ordena el área social sin saturar el espacio.",
     imagenes: [
-      {
-        type: "image",
-        src: "/images/finished/islas-proyecto-1.jpg",
-        alt: "Sala modular en nogal con líneas limpias y luz cálida",
-      },
-      {
-        type: "image",
-        src: "/images/finished/islas-proyecto-2.jpg",
-        alt: "Detalle de veta de nogal y herrajes ocultos",
-      },
-      {
-        type: "image",
-        src: "/images/finished/islas-proyecto-3.jpg",
-        alt: "Módulos de almacenaje oculto con cierre suave",
-      },
+      { type: "image", src: "/images/finished/islas-proyecto-1.jpg", alt: "Sala modular en nogal con líneas limpias y luz cálida" },
+      { type: "image", src: "/images/finished/islas-proyecto-2.jpg", alt: "Detalle de veta de nogal y herrajes ocultos" },
+      { type: "image", src: "/images/finished/islas-proyecto-3.jpg", alt: "Módulos de almacenaje oculto con cierre suave" },
     ],
   },
   {
@@ -51,16 +28,8 @@ const proyectos: Proyecto[] = [
     titulo: "Cocina Abierta",
     descripcion: "Superficies durables y flujo de trabajo claro para una rutina ágil.",
     imagenes: [
-      {
-        type: "image",
-        src: "/images/finished/cca-escuela-1.jpg",
-        alt: "Cocina integral con isla central y frentes de madera",
-      },
-      {
-        type: "image",
-        src: "/images/finished/cca-escuela-2.jpg",
-        alt: "Organizadores internos que optimizan el espacio en cajones",
-      },
+      { type: "image", src: "/images/finished/cca-escuela-1.jpg", alt: "Cocina integral con isla central y frentes de madera" },
+      { type: "image", src: "/images/finished/cca-escuela-2.jpg", alt: "Organizadores internos que optimizan el espacio en cajones" },
     ],
   },
   {
@@ -68,18 +37,8 @@ const proyectos: Proyecto[] = [
     titulo: "Recámara con Vestidor",
     descripcion: "Texturas cálidas y módulos personalizables para descanso sereno y ordenado.",
     imagenes: [
-      {
-        type: "video",
-        src: "/videos/oficina-proyecto-1-video.mp4",
-        poster: "/videos/poster1.jpg",
-        alt: "Recámara principal con cabecera iluminada y vestidor",
-      },
-      {
-        type: "video",
-        src: "/videos/oficina-proyecto-2-video.mp4",
-        poster: "/videos/poster2.jpg",
-        alt: "Vestidor modular con frentes de madera",
-      },
+      { type: "video", src: "/videos/oficina-proyecto-1-video.mp4", poster: "/videos/poster1.jpg", alt: "Recámara principal con cabecera iluminada y vestidor" },
+      { type: "video", src: "/videos/oficina-proyecto-2-video.mp4", poster: "/videos/poster2.jpg", alt: "Vestidor modular con frentes de madera" },
     ],
   },
 ]
@@ -87,13 +46,7 @@ const proyectos: Proyecto[] = [
 const clientLogos = [
   { id: 1, name: "Universidad de Guanajuato", src: "/images/universidad-guanajuato.png", width: 200, height: 120 },
   { id: 2, name: "Deacero", src: "/images/logo/deacero.png", width: 160, height: 80 },
-  {
-    id: 3,
-    name: "Universidad Politécnica de Guanajuato",
-    src: "/images/logo/Universidad Politecnica de Guanajuato.png",
-    width: 160,
-    height: 80,
-  },
+  { id: 3, name: "Universidad Politécnica de Guanajuato", src: "/images/logo/Universidad Politecnica de Guanajuato.png", width: 160, height: 80 },
   { id: 4, name: "agencia kia", src: "/images/logo/agencia kia.png", width: 160, height: 80 },
   { id: 5, name: "nissan", src: "/images/logo/nissan.png", width: 160, height: 80 },
   { id: 6, name: "sep guanajuato", src: "/images/logo/sep guanajuato.png", width: 160, height: 80 },
@@ -107,105 +60,51 @@ const clientLogos = [
 ]
 
 // ---------------------- Helpers de render ----------------------
-function MediaThumb({ item, className }: { item: MediaItem; className?: string }) {
-  if (item.type === "video") {
-    return <video className={className} src={item.src} poster={item.poster} muted playsInline autoPlay loop />
-  }
-  return (
-    <Image
-      src={item.src || "/placeholder.svg"}
-      alt={item.alt}
-      width={1400}
-      height={900}
-      draggable={false}
-      className={className}
-      sizes="(max-width: 768px) 80vw, 40vw"
-    />
-  )
-}
-
 function MediaMain({ item }: { item: MediaItem }) {
   if (item.type === "video") {
     return (
-      <video
-        src={item.src}
-        poster={item.poster}
-        className="w-full h-[48vh] md:h-[60vh] object-cover"
-        controls
-        muted
-        playsInline
-        autoPlay
-        loop
-      />
+      <video src={item.src} poster={item.poster} className="w-full h-[48vh] md:h-[60vh] object-cover" controls muted playsInline autoPlay loop />
     )
   }
   return (
-    <Image
-      src={item.src || "/placeholder.svg"}
-      alt={item.alt}
-      width={1600}
-      height={1000}
-      className="w-full h-[48vh] md:h-[60vh] object-cover"
-      sizes="(max-width: 768px) 90vw, 900px"
-      priority
-    />
+    <Image src={item.src || "/placeholder.svg"} alt={item.alt} width={1600} height={1000} className="w-full h-[48vh] md:h-[60vh] object-cover" sizes="(max-width: 768px) 90vw, 900px" priority />
   )
 }
-
 function MediaMini({ item }: { item: MediaItem }) {
-  if (item.type === "video") {
-    return <video src={item.src} poster={item.poster} className="h-20 w-full object-cover" muted playsInline />
-  }
-  return (
-    <Image
-      src={item.src || "/placeholder.svg"}
-      alt={item.alt}
-      width={300}
-      height={200}
-      className="h-20 w-full object-cover"
-      sizes="160px"
-    />
-  )
+  if (item.type === "video") return <video src={item.src} poster={item.poster} className="h-20 w-full object-cover" muted playsInline />
+  return <Image src={item.src || "/placeholder.svg"} alt={item.alt} width={300} height={200} className="h-20 w-full object-cover" sizes="160px" />
 }
 
 // ---------------------- Componente ----------------------
 export default function ClientesYProyectos() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
-  const logoRef = useRef<HTMLDivElement>(null)
 
-  const duplicatedLogos = [...clientLogos, ...clientLogos]
+  // Trigger dedicado de "Marca Guanajuato"
+  const marcaRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLSpanElement>(null)
+  const logoRef = useRef<HTMLDivElement>(null)
 
   // Lightbox
   const [abierto, setAbierto] = useState(false)
   const [proyectoActivo, setProyectoActivo] = useState<number>(0)
   const [indiceImagen, setIndiceImagen] = useState<number>(0)
 
-  const imagenActual = useMemo(() => {
-    const p = proyectos[proyectoActivo]
-    return p?.imagenes?.[indiceImagen]
-  }, [proyectoActivo, indiceImagen])
+  const imagenActual = useMemo(() => proyectos[proyectoActivo]?.imagenes?.[indiceImagen], [proyectoActivo, indiceImagen])
 
   const abrirGaleria = useCallback((idxProyecto: number, idxImagen: number) => {
-    setProyectoActivo(idxProyecto)
-    setIndiceImagen(idxImagen)
-    setAbierto(true)
+    setProyectoActivo(idxProyecto); setIndiceImagen(idxImagen); setAbierto(true)
     document.documentElement.style.overflow = "hidden"
   }, [])
-
-  const cerrarGaleria = useCallback(() => {
-    setAbierto(false)
-    document.documentElement.style.overflow = ""
-  }, [])
+  const cerrarGaleria = useCallback(() => { setAbierto(false); document.documentElement.style.overflow = "" }, [])
 
   const siguiente = useCallback(() => {
     const total = proyectos[proyectoActivo].imagenes.length
-    setIndiceImagen((i) => (i + 1) % total)
+    setIndiceImagen(i => (i + 1) % total)
   }, [proyectoActivo])
-
   const anterior = useCallback(() => {
     const total = proyectos[proyectoActivo].imagenes.length
-    setIndiceImagen((i) => (i - 1 + total) % total)
+    setIndiceImagen(i => (i - 1 + total) % total)
   }, [proyectoActivo])
 
   useEffect(() => {
@@ -219,35 +118,51 @@ export default function ClientesYProyectos() {
     return () => window.removeEventListener("keydown", onKey)
   }, [abierto, siguiente, anterior, cerrarGaleria])
 
-  // Gradiente scroll-reactivo
+  // Gradiente scroll-reactivo del fondo grande
   useEffect(() => {
-    const section = sectionRef.current
-    const bg = bgRef.current
+    const section = sectionRef.current, bg = bgRef.current
     if (!section || !bg) return
 
     gsap.set(bg, { backgroundPosition: "0% 0%" })
-
     const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.2,
-      },
+      scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: 1.2 },
       defaults: { ease: "none" },
     })
-
     tl.to(bg, { backgroundPosition: "0% 100%" }, 0)
 
-    return () => {
-      tl.kill()
-      ScrollTrigger.getAll().forEach((t) => t.kill())
-    }
+    return () => { tl.kill(); ScrollTrigger.getAll().forEach(t => t.kill()) }
+  }, [])
+
+  // ✅ Entrada por scroll: aparece apenas asoma y NO desaparece al seguir bajando
+  useEffect(() => {
+    const triggerEl = marcaRef.current, heading = headingRef.current, logo = logoRef.current
+    if (!triggerEl || !heading || !logo) return
+
+    // Estado inicial por CSS (clase .pre-anim). Refresco para layout dinámico
+    requestAnimationFrame(() => ScrollTrigger.refresh())
+
+    const tlIn = gsap.timeline({
+      scrollTrigger: {
+        trigger: triggerEl,
+        start: "top bottom",      // se dispara cuando el top de la sección toca el borde inferior del viewport
+        end: "bottom top",        // duración del trigger (no usamos scrub aquí)
+        toggleActions: "play none none reverse", // NO se revierte al bajar; solo al volver hacia arriba
+        // markers: true,
+      },
+      defaults: { ease: "power3.out", duration: 0.9 },
+    })
+
+    tlIn
+      .to(heading, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }, 0)
+      .to(logo,    { opacity: 1, y: 0, scale: 1.02, rotate: 0, filter: "blur(0px)" }, 0.05)
+      .to(logo,    { scale: 1, duration: 0.3, ease: "power2.out" }, ">-0.1")
+
+    return () => { tlIn.scrollTrigger?.kill(); tlIn.kill() }
   }, [])
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden" style={{ background: "#ffffff" }}>
-      {/* Capa única del gradiente */}
+      {/* Fondo degradado grande */}
       <div
         ref={bgRef}
         aria-hidden
@@ -264,27 +179,24 @@ export default function ClientesYProyectos() {
         }}
       />
 
-      {/* desvanecer a negro para unión limpia */}
-<div
-  aria-hidden
-  className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
-  style={{
-    background: `
-      linear-gradient(
-        to bottom,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0.05) 40%,
-        rgba(0,0,0,0.15) 60%,
-        rgba(0,0,0,0.35) 78%,
-        rgba(0,0,0,0.6) 90%,
-        rgba(0,0,0,1) 100%
-      )
-    `
-  }}
-/>
-
-
-
+      {/* Degradado inferior largo y suave hacia negro puro */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
+        style={{
+          background: `
+            linear-gradient(
+              to bottom,
+              rgba(0,0,0,0) 0%,
+              rgba(0,0,0,0.05) 40%,
+              rgba(0,0,0,0.15) 60%,
+              rgba(0,0,0,0.35) 78%,
+              rgba(0,0,0,0.6) 90%,
+              rgba(0,0,0,1) 100%
+            )
+          `,
+        }}
+      />
 
       {/* ===================== CLIENTES ===================== */}
       <div className="relative container mx-auto px-6 py-[20vh] z-10">
@@ -299,23 +211,11 @@ export default function ClientesYProyectos() {
           {/* Fades laterales */}
           <div className="pointer-events-none absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10" />
           <div className="pointer-events-none absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10" />
-          <div
-            className="flex animate-scroll hover:pause-animation will-change-transform"
-            style={{ width: `${[...clientLogos, ...clientLogos].length * 250}px`, transform: "translate3d(0,0,0)" }}
-          >
+          <div className="flex animate-scroll hover:pause-animation will-change-transform" style={{ width: `${[...clientLogos, ...clientLogos].length * 250}px`, transform: "translate3d(0,0,0)" }}>
             {[...clientLogos, ...clientLogos].map((logo, index) => (
-              <div
-                key={`${logo.id}-${index}`}
-                className="flex-shrink-0 w-[250px] h-[120px] flex items-center justify-center"
-              >
+              <div key={`${logo.id}-${index}`} className="flex-shrink-0 w-[250px] h-[120px] flex items-center justify-center">
                 <div className="px-8">
-                  <Image
-                    src={logo.src || "/placeholder.svg"}
-                    alt={logo.name}
-                    width={logo.width}
-                    height={logo.height}
-                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity"
-                  />
+                  <Image src={logo.src || "/placeholder.svg"} alt={logo.name} width={logo.width} height={logo.height} className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             ))}
@@ -328,78 +228,51 @@ export default function ClientesYProyectos() {
       </div>
 
       {/* ===================== MARCA GUANAJUATO ===================== */}
-      <div className="relative z-10 flex items-center justify-center h-screen w-screen flex-col gap-6">
-        {/* TEXTO MÁS GRANDE con entrada */}
-        <span className="heading-in text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight text-white pb-24 md:pb-28 drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">
+      <div
+        ref={marcaRef}
+        className="relative z-10 flex items-center justify-center h-screen w-screen flex-col gap-6"
+      >
+        {/* TEXTO (estado inicial oculto) */}
+        <span
+          ref={headingRef}
+          className="pre-anim text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight text-white pb-24 md:pb-28 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]"
+        >
           Somos marca guanajuato
         </span>
 
-        {/* Contenedor de ENTRADA del logo */}
-        <div className="logo-in">
-          {/* Flotado continuo + hover outline */}
-          <div
-            ref={logoRef}
-            className="logo-float group select-none"
-            aria-label="Logo Marca Guanajuato animado"
-            role="img"
-          >
-            <Image
-              height={1200}
-              width={1000}
-              alt="logo marca guanajuato"
-              src="/images/logo/logo-marca-guanajuato.png"
-              priority
-              sizes="(max-width: 768px) 280px, 380px"
-              className="logo-img w-[260px] md:w-[380px] h-auto transition-transform duration-300 group-hover:scale-[1.05]"
-            />
-          </div>
+        {/* LOGO (estado inicial oculto + flotado continuo via CSS) */}
+        <div ref={logoRef} className="pre-anim logo-float group select-none" aria-label="Logo Marca Guanajuato animado" role="img">
+          <Image
+            height={1200}
+            width={1000}
+            alt="logo marca guanajuato"
+            src="/images/logo/logo-marca-guanajuato.png"
+            priority
+            sizes="(max-width: 768px) 280px, 380px"
+            className="logo-img w-[260px] md:w-[380px] h-auto transition-transform duration-300 group-hover:scale-[1.05]"
+          />
         </div>
       </div>
 
       {/* KEYFRAMES DEL CARRUSEL */}
       <style jsx>{`
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-${clientLogos.length * 250}px); }
-        }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-${clientLogos.length * 250}px); } }
         .animate-scroll { animation: scroll 30s linear infinite; }
         .hover\\:pause-animation:hover { animation-play-state: paused; }
       `}</style>
 
-      {/* Animaciones de ENTRADA y MOVIMIENTO (texto y logo) */}
+      {/* Animaciones y estados iniciales */}
       <style jsx>{`
-        /* ENTRADA del texto (opacidad + desplazamiento) */
-        @keyframes headingPopIn {
-          0% { opacity: 0; transform: translateY(26px) scale(0.98); filter: blur(6px); }
-          60% { opacity: 1; transform: translateY(-4px) scale(1.005); filter: blur(0); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .heading-in {
-          animation: headingPopIn 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
-          will-change: transform, opacity, filter;
-        }
+        /* Estado inicial para evitar parpadeos antes de hidratar */
+        .pre-anim { opacity: 0; transform: translateY(34px) scale(0.98); filter: blur(6px); will-change: transform, opacity, filter; }
 
-        /* ENTRADA del logo (opacidad + suavizado + leve giro) */
-        @keyframes logoPopIn {
-          0% { opacity: 0; transform: translateY(26px) scale(0.9) rotate(-5deg); filter: blur(10px); }
-          60% { opacity: 1; transform: translateY(-4px) scale(1.03) rotate(-0.3deg); filter: blur(0); }
-          100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
-        }
-        .logo-in {
-          animation: logoPopIn 950ms 90ms cubic-bezier(0.22, 1, 0.36, 1) both;
-          will-change: transform, opacity, filter;
-        }
-
-        /* Flotado continuo MÁS PRONUNCIADO (vaivén sutil en X + mayor amplitud en Y) */
+        /* Flotado continuo del logo */
         @keyframes logoFloat {
           0%   { transform: translate3d(-3px, 0, 0) rotate(0deg); }
           50%  { transform: translate3d(3px, -16px, 0) rotate(1.2deg); }
           100% { transform: translate3d(-3px, 0, 0) rotate(0deg); }
         }
-        .logo-float {
-          animation: logoFloat 3.6s ease-in-out 1s infinite;
-          will-change: transform;
-        }
+        .logo-float { animation: logoFloat 3.6s ease-in-out 1s infinite; will-change: transform; }
 
         /* Contorno al alfa del PNG en hover/focus */
         .logo-float .logo-img { filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
@@ -412,10 +285,7 @@ export default function ClientesYProyectos() {
             drop-shadow(0 0 8px rgba(255,255,255,0.65));
         }
 
-        /* Respeta preferencias de menos movimiento */
-        @media (prefers-reduced-motion: reduce) {
-          .heading-in, .logo-in, .logo-float { animation: none !important; }
-        }
+        @media (prefers-reduced-motion: reduce) { .logo-float { animation: none !important; } }
       `}</style>
 
       {/* ===================== MODAL LIGHTBOX ===================== */}
@@ -426,51 +296,18 @@ export default function ClientesYProyectos() {
             <div className="px-4 py-3 border-b">
               <h4 className="text-base md:text-lg font-medium">{proyectos[proyectoActivo]?.titulo}</h4>
               <p className="text-xs md:text-sm text-gray-600">{imagenActual?.alt}</p>
-              <button
-                onClick={cerrarGaleria}
-                className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-black/80 text-white hover:bg-black"
-                aria-label="Cerrar"
-                title="Cerrar"
-              >
-                ×
-              </button>
+              <button onClick={cerrarGaleria} className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-black/80 text-white hover:bg-black" aria-label="Cerrar" title="Cerrar">×</button>
             </div>
 
             <div className="relative">
               <div className="relative overflow-hidden">{imagenActual && <MediaMain item={imagenActual} />}</div>
 
               {/* Flechas */}
-              <button
-                onClick={anterior}
-                className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full bg-white/80 hover:bg-white px-3 py-2 shadow"
-                aria-label="Anterior"
-                title="Anterior"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M15 18l-6-6 6-6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+              <button onClick={anterior} className="absolute left-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full bg-white/80 hover:bg-white px-3 py-2 shadow" aria-label="Anterior" title="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
-              <button
-                onClick={siguiente}
-                className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full bg-white/80 hover:bg-white px-3 py-2 shadow"
-                aria-label="Siguiente"
-                title="Siguiente"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M9 6l6 6-6 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+              <button onClick={siguiente} className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full bg-white/80 hover:bg-white px-3 py-2 shadow" aria-label="Siguiente" title="Siguiente">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
             </div>
 
@@ -479,13 +316,7 @@ export default function ClientesYProyectos() {
               {proyectos[proyectoActivo]?.imagenes.map((img, i) => {
                 const activa = i === indiceImagen
                 return (
-                  <button
-                    key={img.src + i}
-                    onClick={() => setIndiceImagen(i)}
-                    className={`overflow-hidden rounded-md border ${activa ? "ring-2 ring-black" : ""}`}
-                    aria-label={`Ver media ${i + 1}`}
-                    title={`Ver media ${i + 1}`}
-                  >
+                  <button key={img.src + i} onClick={() => setIndiceImagen(i)} className={`overflow-hidden rounded-md border ${activa ? "ring-2 ring-black" : ""}`} aria-label={`Ver media ${i + 1}`} title={`Ver media ${i + 1}`}>
                     <MediaMini item={img} />
                   </button>
                 )

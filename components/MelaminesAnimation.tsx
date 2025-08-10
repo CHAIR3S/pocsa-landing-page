@@ -48,9 +48,6 @@ useEffect(() => {
     ScrollTrigger.refresh();
   });
 
-  return () => {
-    ScrollTrigger.getAll().forEach((t) => t.kill());
-  };
 }, []);
 
 

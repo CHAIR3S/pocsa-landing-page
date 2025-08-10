@@ -182,7 +182,6 @@ export default function BentoGrid() {
       { backgroundPosition: "center 50%" },
       { backgroundPosition: "center 20%", ease: "none", duration: 0.5 }
     );
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 
   return (

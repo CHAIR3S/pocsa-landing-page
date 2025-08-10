@@ -185,7 +185,6 @@ export default function PocsaLanding() {
         2
       );
 
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 
   useEffect(() => {
@@ -210,10 +209,6 @@ export default function PocsaLanding() {
       }
     );
 
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
   }, []);
 
   useEffect(() => {
@@ -233,7 +228,6 @@ export default function PocsaLanding() {
       .to(layerBlueRef.current, { opacity: 0, ease: "none", duration: 0.5 }, 0.5)
       .to(layerBlackRef.current, { opacity: 1, ease: "none", duration: 0.5 }, 0.5);
 
-    return () => tl.scrollTrigger?.kill();
   }, []);
 
   return (

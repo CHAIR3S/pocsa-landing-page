@@ -38,10 +38,6 @@ export default function NuestrosProductosGradient() {
       },
     });
 
-    return () => {
-      tween.kill();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
   }, []);
 
   return (

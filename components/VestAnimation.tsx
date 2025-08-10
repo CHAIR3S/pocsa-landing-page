@@ -66,9 +66,6 @@ export default function VestAnimation() {
       ScrollTrigger.refresh();
     });
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
   }, []);
 
   return (
