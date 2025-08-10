@@ -22,7 +22,7 @@ export default function NuestrosProductosGradient() {
       backgroundSize: "200% 100%",
       color: "transparent",
       backgroundImage:
-        "linear-gradient(90deg, #000000 0%, #153d1d 20%, #2b602e 30%, #488f46 40%)",
+        "linear-gradient(90deg, #000000 0%, #153d1d 20%, #2b602e 50%, #488f46 40%)",
       WebkitBackgroundClip: "text",
       backgroundClip: "text",
     });
