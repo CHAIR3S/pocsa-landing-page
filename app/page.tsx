@@ -18,6 +18,7 @@ import MelaminesAnimation from "@/components/MelaminesAnimation";
 import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
 import NuestrosProductosGradient from "@/components/NuestrosProductosGradient";
+import FullSectionWithBackground from "@/components/FullSectionWithBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -133,7 +134,7 @@ export default function PocsaLanding() {
       },
     });
 
-    tl.to(subtitleRef.current, { opacity: 0, duration: 1.3 })
+    tl.to(subtitleRef.current, { opacity: 0, duration: 0.8 })
       .to(imageRef.current, { scale: 0.9, duration: 1.3 }, "<")
       .to(heroTitleRef.current, { y: -50, opacity: 0, duration: 0.4 }, "<")
       .to(
@@ -335,13 +336,14 @@ export default function PocsaLanding() {
               </div>
 
               {/* Subtitle */}
-              <p
-                ref={subtitleRef}
-                className="text-white/90 text-lg md:text-xl text-center max-w-2xl mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-2xl border border-white/20"
-              >
-                Somos una empresa especializada en la fabricación de una amplia gama de muebles personalizados de alta calidad. Nuestro
-                compromiso es transformar tus ideas en piezas únicas que reflejen tu estilo y necesidades.
-              </p>
+<p
+  ref={subtitleRef}
+  className="text-white text-lg md:text-xl text-center max-w-2xl mb-8 backdrop-blur-md bg-black/40 p-4 rounded-2xl border border-white/30 shadow-lg"
+>
+  Somos una empresa especializada en la fabricación de una amplia gama de muebles personalizados de alta calidad. 
+  Nuestro compromiso es transformar tus ideas en piezas únicas que reflejen tu estilo y necesidades.
+</p>
+
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 mt-5">
@@ -475,32 +477,19 @@ export default function PocsaLanding() {
           </h3>
         </section>
 
-        {/* === WRAPPER 300vh con fondo que cambia por scroll === */}
-        <section ref={bgWrapRef} className="relative w-screen min-h-[300vh] overflow-visible">
-          {/* Capas de fondo (si las usas) */}
-          <div className="absolute inset-0 z-0 pointer-events-none h-full">
-            <div ref={layerGreenRef} className="absolute inset-0" />
-            <div ref={layerBlueRef} className="absolute inset-0" />
-            <div ref={layerBlackRef} className="absolute inset-0" />
-          </div>
+{/* === WRAPPER 300vh con fondo que cambia por scroll === */}
+<section ref={bgWrapRef} className="relative w-screen min-h-[300vh] overflow-visible">
+  {/* Capas de fondo (si las usas) */}
+  <div className="absolute inset-0 z-0 pointer-events-none h-full">
+    <div ref={layerGreenRef} className="absolute inset-0" />
+    <div ref={layerBlueRef} className="absolute inset-0" />
+    <div ref={layerBlackRef} className="absolute inset-0" />
+  </div>
 
-          {/* Contenido encima del fondo */}
-          <div className="relative z-10">
-            <section className="w-screen bg-transparent flex items-center justify-center flex-col pt-[5vh] min-h-[140vh]">
-              <ShippingSection />
-            </section>
+  {/* Contenido encima del fondo */}
+  <FullSectionWithBackground />
+</section>
 
-            {/* SECCIÓN CATÁLOGO / BOOK */}
-            <section
-              className="w-full bg-transparent flex justify-center items-center overflow-visible min-h-[160vh]"
-            >
-              <div 
-              ref={bookRef}>
-                <Book />
-              </div>
-            </section>
-          </div>
-        </section>
       </div>
 
       <video style={{ width: "100vw", height: "auto" }} autoPlay loop muted preload="auto">
