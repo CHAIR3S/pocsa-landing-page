@@ -541,7 +541,7 @@ Comentarios adicionales:`
   </div>
 
   {/* Contenido encima del fondo */}
-  <FullSectionWithBackground />
+  <FullSectionWithBackground bookRef={bookRef} />
 </section>
 
       </div>

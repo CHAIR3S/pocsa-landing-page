@@ -1,12 +1,15 @@
 'use client'
 
-import { useRef } from "react";
 import ShippingSection from "./ShippingSection";
 import Book from "./Book";
+import { RefObject } from "react";
 
-export default function FullSectionWithBackground() {
-  const bookRef = useRef<HTMLDivElement>(null);
 
+interface Props {
+  bookRef: RefObject<HTMLDivElement>;
+}
+
+export default function FullSectionWithBackground({ bookRef }: Props) {
   return (
     <section className="relative w-full min-h-screen overflow-hidden">
       {/* FONDO NEGRO + MANCHAS VERDES */}
