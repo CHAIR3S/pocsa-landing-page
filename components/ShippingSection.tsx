@@ -1,6 +1,6 @@
 'use client'
 
-import { Truck, MapPin, Clock, Shield } from 'lucide-react'
+import { Truck, MapPin, Shield } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function ShippingSection() {
@@ -35,11 +35,7 @@ export default function ShippingSection() {
       <div className="container mx-auto px-4 relative z-10">
         {/* Título principal con animación */}
         <div className={`text-center mb-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="inline-flex items-center gap-4 mb-6">
-            <div className="w-1 h-8 bg-[#77eb76] animate-bounce"></div>
-            <Truck className="w-8 h-8 text-[#77eb76] animate-bounce delay-200" />
-            <div className="w-1 h-8 bg-[#77eb76] animate-bounce delay-400"></div>
-          </div>
+
           
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             ENVÍOS A
@@ -58,7 +54,7 @@ export default function ShippingSection() {
         </div>
 
         {/* Estadísticas con animación */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 mb-16">
           <div className={`text-center transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-20 h-20 mx-auto mb-4 relative group">
               <div className="absolute inset-0 bg-[#77eb76]/20 rounded-full animate-ping"></div>
@@ -70,7 +66,7 @@ export default function ShippingSection() {
             <p className="text-gray-400">Cobertura nacional</p>
           </div>
 
-          <div className={`text-center transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {/* <div className={`text-center transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-20 h-20 mx-auto mb-4 relative group">
               <div className="absolute inset-0 bg-[#77eb76]/20 rounded-full animate-ping delay-200"></div>
               <div className="absolute inset-2 bg-black rounded-full flex items-center justify-center border-2 border-[#77eb76] group-hover:scale-110 transition-transform duration-300">
@@ -79,7 +75,7 @@ export default function ShippingSection() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">5-15 Días</h3>
             <p className="text-gray-400">Entrega rápida</p>
-          </div>
+          </div> */}
 
           <div className={`text-center transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="w-20 h-20 mx-auto mb-4 relative group">
@@ -127,18 +123,24 @@ export default function ShippingSection() {
         </div>
 
         {/* Call to action */}
-        <div className={`text-center mt-12 transition-all duration-1000 delay-1100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <button className="group relative px-8 py-4 bg-[#77eb76] text-black font-semibold text-lg rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#77eb76]/25 hover:scale-105">
+        <div className={`text-center mt-12 transition-all duration-1000 delay-1100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 '}`}>
+
+
+          {/* <button className="group relative px-8 py-4 bg-[#77eb76] text-black font-semibold text-lg rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#77eb76]/25 hover:scale-105">
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
             <div className="relative flex items-center gap-3">
               <Truck className="w-6 h-6 group-hover:animate-bounce" />
               Consultar envío
             </div>
-          </button>
+          </button> */}
           
-          <p className="text-gray-500 mt-4 text-sm">
-            Calculamos el costo según tu ubicación
-          </p>
+          <div className="inline-flex items-center gap-4 mb-6 mt-[10vh]">
+            <div className="w-2 h-[8vh] bg-[#77eb76] animate-bounce"></div>
+            <Truck className="w-[8vw] h-[8vw] text-[#77eb76] animate-bounce delay-200" />
+            <div className="w-2 h-[8vh] bg-[#77eb76] animate-bounce delay-400"></div>
+          </div>
+
+
         </div>
       </div>
 
