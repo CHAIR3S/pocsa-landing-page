@@ -83,12 +83,12 @@ export default function ContactForm() {
                     required
                   >
                     <option value="">Selecciona una opción</option>
-                    <option value="linea-metalica">Línea Metálica</option>
-                    <option value="linea-almacenamiento">Línea de Almacenamiento</option>
-                    <option value="linea-escolar">Línea Escolar</option>
-                    <option value="linea-hogar">Línea para el Hogar</option>
-                    <option value="linea-oficina">Línea de Oficina</option>
-                    <option value="cotizacion">Cotización Personalizada</option>
+                    <option value="linea-metalica">Islas</option>
+                    <option value="linea-almacenamiento">Escolar</option>
+                    <option value="linea-escolar">Hogar</option>
+                    <option value="linea-hogar">Módulos Ejecutivos</option>
+                    <option value="linea-oficina">Mesas de Juntas</option>
+                    <option value="cotizacion">Recepciones</option>
                   </select>
                 </div>
 
