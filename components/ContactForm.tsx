@@ -79,7 +79,7 @@ export default function ContactForm() {
                     name="interestedIn"
                     value={formData.interestedIn}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
+                    className="text-black w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
                     required
                   >
                     <option value="">Selecciona una opción</option>
@@ -117,7 +117,7 @@ export default function ContactForm() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={6}
-                  className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors resize-none"
+                  className="text-black w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors resize-none"
                   placeholder="Cuéntanos sobre tu proyecto o consulta..."
                   required
                 />

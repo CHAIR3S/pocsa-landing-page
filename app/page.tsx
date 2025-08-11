@@ -55,6 +55,14 @@ export default function PocsaLanding() {
     window.scrollTo({ top: y, behavior: "smooth" });
   }
 
+  // pon esto arriba del return, dentro del componente:
+const HDR_TEXT_SHADOW =
+  "0 0 3px rgba(0,0,0,1), 0 0 8px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,0.85)";
+const HDR_ICON_FILTER =
+  "drop-shadow(0 0 2px rgba(0,0,0,1)) drop-shadow(0 0 6px rgba(0,0,0,0.85)) drop-shadow(0 2px 3px rgba(0,0,0,0.85))";
+const HDR_STROKE = "0.35px rgba(0,0,0,0.55)";
+
+
   const goHome = () => scrollToRef(homeRef);
   const goProducts = () => scrollToRef(productsRef);
   const goCatalog = () => scrollToRef(bookRef);
@@ -238,78 +246,98 @@ export default function PocsaLanding() {
       {/* ANCLA DE HOME */}
       <div ref={homeRef} />
 
-      {/* Navigation */}
-      <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 backdrop-blur-xl">
-        <div
-          className="space-x-2 cursor-pointer"
-          style={{ width: 100, height: 67, overflow: "hidden", position: "relative" }}
-          onClick={goHome}
-        >
-          <Image src="/logo-pocsa-color.svg" alt="Icono" fill style={{ objectFit: "cover", cursor: "pointer" }} />
-        </div>
+{/* Navigation */}
+<header className="fixed w-full z-50 flex items-center justify-between lg:px-12 backdrop-blur-xl">
+  <div
+    className="space-x-2 cursor-pointer"
+    style={{ width: 100, height: 67, overflow: "hidden", position: "relative" }}
+    onClick={goHome}
+  >
+    <Image src="/logo-pocsa-color.svg" alt="Icono" fill style={{ objectFit: "cover", cursor: "pointer" }} />
+  </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw] text-white/90 text-shadow-white">
-          <button onClick={goHome} className="hover:text-white transition-colors font-medium cursor-pointer">
-            HOME
-          </button>
+  {/* Desktop Navigation */}
+  <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw] font-medium">
+    <button onClick={goHome} className="hover:opacity-100 transition-colors cursor-pointer">
+      <span style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
+        HOME
+      </span>
+    </button>
 
-          {/* Dropdown de Productos */}
-          <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button className="hover:text-white transition-colors font-medium flex items-center gap-1 py-2 ">
-              <span className="text-white/90 text-shadow-white">PRODUCTOS</span>
-              <ChevronDown className={`w-4 h-4 transition-all duration-200 ${isProductsOpen ? "rotate-180 text-[#9bef86]" : ""}`} />
-            </button>
+    {/* Dropdown de Productos */}
+    <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <button className="transition-colors font-medium flex items-center gap-1 py-2 cursor-pointer">
+        <span style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
+          PRODUCTOS
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 transition-all duration-200 ${isProductsOpen ? "rotate-180 text-[#9bef86]" : ""}`}
+          style={{ filter: HDR_ICON_FILTER }}
+        />
+      </button>
 
-            {/* Dropdown Menu */}
-            <div
-              ref={dropdownRef}
-              className={`rounded-sm bg-white absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 transition-all duration-200 ease-out ${
-                isProductsOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
-              }`}
+      {/* Dropdown Menu (no necesita sombra; fondo blanco, texto oscuro) */}
+      <div
+        ref={dropdownRef}
+        className={`rounded-sm bg-white absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 transition-all duration-200 ease-out ${
+          isProductsOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        <div className="backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-3 overflow-hidden">
+          {productLines.map((line, index) => (
+            <button
+              key={line.id}
+              onClick={() => openProductGallery(line.id)}
+              className="block w-full text-left px-6 py-4 text-gray-800 hover:bg-[#9bef86]/20 hover:text-black transition-all duration-150 font-medium border-l-4 border-transparent hover:border-[#9bef86] hover:pl-8"
+              style={{
+                animationDelay: `${index * 50}ms`,
+                animation: isProductsOpen ? "slideInFromLeft 0.3s ease-out forwards" : "none",
+              }}
             >
-              <div className="backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 py-3 overflow-hidden">
-                {productLines.map((line, index) => (
-                  <button
-                    key={line.id}
-                    onClick={() => openProductGallery(line.id)}
-                    className="block w-full text-left px-6 py-4 text-gray-800 hover:bg-[#9bef86]/20 hover:text-black transition-all duration-150 font-medium border-l-4 border-transparent hover:border-[#9bef86] hover:pl-8"
-                    style={{
-                      animationDelay: `${index * 50}ms`,
-                      animation: isProductsOpen ? "slideInFromLeft 0.3s ease-out forwards" : "none",
-                    }}
-                  >
-                    {line.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <button onClick={goCatalog} className="hover:text-white transition-colors font-medium cursor-pointer">
-            CATÁLOGO
-          </button>
-          <button onClick={goContact} className="hover:text-white transition-colors font-medium">
-            CONTACTO
-          </button>
-        </nav>
-
-        {/* Contact Info */}
-        <div className="hidden lg:flex items-center space-x-4">
-          <div className="flex items-center space-x-2 text-white/90">
-            <Phone className="w-4 h-4" />
-            <span className="text-sm">461 273 8725</span>
-          </div>
-          <Button variant="outline" className="cursor-pointer bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md cursorpoin" onClick={goContact}>
-            Cotizar
-          </Button>
+              {line.label}
+            </button>
+          ))}
         </div>
+      </div>
+    </div>
 
-        {/* Mobile Menu Button */}
-        <Button variant="ghost" size="icon" className="md:hidden text-white">
-          <Menu className="w-6 h-6" />
-        </Button>
-      </header>
+    <button onClick={goCatalog} className="transition-colors cursor-pointer hover:opacity-100">
+      <span style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
+        CATÁLOGO
+      </span>
+    </button>
+    <button onClick={goContact} className="transition-colors cursor-pointer hover:opacity-100">
+      <span style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
+        CONTACTO
+      </span>
+    </button>
+  </nav>
+
+  {/* Contact Info */}
+  <div className="hidden lg:flex items-center space-x-4">
+    <div className="flex items-center space-x-2">
+      <Phone className="w-4 h-4" style={{ filter: HDR_ICON_FILTER }} />
+      <span className="text-sm" style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
+        461 273 8725
+      </span>
+    </div>
+    <Button
+      variant="outline"
+      className="cursor-pointer bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md"
+      onClick={goContact}
+      style={{ textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}
+    >
+      Cotizar
+    </Button>
+  </div>
+
+  {/* Mobile Menu Button */}
+  <Button variant="ghost" size="icon" className="md:hidden text-white">
+    <Menu className="w-6 h-6" style={{ filter: HDR_ICON_FILTER }} />
+  </Button>
+</header>
+
+
 
       {/* Contenido principal con máscara */}
       <div
@@ -612,6 +640,10 @@ Comentarios adicionales:`
         .animate-glow {
           animation: glow 2s ease-in-out infinite;
         }
+
+
+
+
       `}</style>
     </>
   );

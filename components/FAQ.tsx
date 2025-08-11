@@ -32,7 +32,7 @@ const faqData = [
   {
     question: "¿Qué métodos de pago aceptan?",
     answer:
-      "Aceptamos múltiples formas de pago: efectivo, transferencias bancarias, tarjetas de crédito y débito, y pagos en línea. Para proyectos grandes, ofrecemos planes de financiamiento sin intereses hasta 12 meses. Requerimos un anticipo del 50% para iniciar la fabricación.",
+      "Aceptamos múltiples formas de pago: efectivo, transferencias bancarias, tarjetas de crédito y débito. Para proyectos grandes, ofrecemos planes de financiamiento sin intereses hasta 12 meses. Requerimos un anticipo del 50% para iniciar la fabricación.",
   },
 ]
 
@@ -59,7 +59,7 @@ export default function FAQ() {
               <div key={index} className="border-b border-gray-200 pb-4">
                 <button
                   onClick={() => toggleQuestion(index)}
-                  className="w-full flex items-center justify-between text-left py-4 hover:text-gray-600 transition-colors"
+                  className="cursor-pointer w-full flex items-center justify-between text-left py-4 hover:text-gray-600 transition-colors"
                 >
                   <span className="text-lg font-medium text-gray-900 pr-4">{faq.question}</span>
                   <div className="flex-shrink-0">

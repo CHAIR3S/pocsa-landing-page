@@ -69,7 +69,7 @@ export default function ShippingSection() {
                 <MapPin className="w-8 h-8 text-[#77eb76]" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">32 Estados</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">Todos los estados</h3>
             <p className="text-gray-400">Cobertura nacional</p>
           </div>
 
