@@ -19,6 +19,7 @@ import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
 import NuestrosProductosGradient from "@/components/NuestrosProductosGradient";
 import FullSectionWithBackground from "@/components/FullSectionWithBackground";
+import CalidadSection from "@/components/CalidadSection";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -433,7 +434,7 @@ export default function PocsaLanding() {
 
       <VestAnimation />
 
-      <section className="w-screen h-screen bg-black flex flex-row container">
+      {/* <section className="w-screen h-screen bg-black flex flex-row container">
         <div className="w-1/2 h-full flex items-center justify-center">
           <FurAnimation width={600} height={723} />
         </div>
@@ -455,7 +456,9 @@ export default function PocsaLanding() {
             <span className="text-2xl font-bold ">, para garantizar belleza, resistencia y satisfacción total.</span>
           </div>
         </div>
-      </section>
+      </section> */}
+
+        <CalidadSection />
 
       <div className="bg-black">
         <section
