@@ -44,7 +44,7 @@ const proyectos: Proyecto[] = [
 ]
 
 const clientLogos = [
-  { id: 1, name: "Universidad de Guanajuato", src: "/images/universidad-guanajuato.png", width: 200, height: 120 },
+  { id: 1, name: "Universidad de Guanajuato", src: "/images/universidad-guanajuato.png", width: 200, height: 420 },
   { id: 2, name: "Deacero", src: "/images/logo/deacero.png", width: 160, height: 80 },
   { id: 3, name: "Universidad Politécnica de Guanajuato", src: "/images/logo/Universidad Politecnica de Guanajuato.png", width: 160, height: 80 },
   { id: 4, name: "agencia kia", src: "/images/logo/agencia kia.png", width: 160, height: 80 },
