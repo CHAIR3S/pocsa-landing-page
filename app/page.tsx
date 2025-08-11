@@ -8,14 +8,10 @@ import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import BentoGrid from "../components/BentoGrid";
 import ClientsCarousel from "@/components/ClientsCarousel";
-import { FurAnimation } from "@/components/WebMAnimation";
 import ContactForm from "@/components/ContactForm";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
-import dynamic from "next/dynamic";
-const Book = dynamic(() => import("@/components/Book"), { ssr: false });
 import MelaminesAnimation from "@/components/MelaminesAnimation";
-import ShippingSection from "@/components/ShippingSection";
 import VestAnimation from "@/components/VestAnimation";
 import NuestrosProductosGradient from "@/components/NuestrosProductosGradient";
 import FullSectionWithBackground from "@/components/FullSectionWithBackground";
@@ -81,6 +77,11 @@ export default function PocsaLanding() {
     }
     setIsProductsOpen(false);
   }
+
+  
+  const START_YEAR = 2024
+  const now = new Date().getFullYear()
+  const yearText = START_YEAR === now ? `${now}` : `${START_YEAR}–${now}`
 
   const productLines = [
     { label: "Islas", id: "islas" as ProductId },
@@ -297,7 +298,7 @@ export default function PocsaLanding() {
         <div className="hidden lg:flex items-center space-x-4">
           <div className="flex items-center space-x-2 text-white/90">
             <Phone className="w-4 h-4" />
-            <span className="text-sm">+1 234 567 890</span>
+            <span className="text-sm">461 273 8725</span>
           </div>
           <Button variant="outline" className="cursor-pointer bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-md cursorpoin" onClick={goContact}>
             Cotizar
@@ -373,14 +374,36 @@ export default function PocsaLanding() {
               <div className="flex items-center space-x-6 text-white/80 text-sm">
                 <div className="flex items-center space-x-2">
                   <MapPin className="w-4 h-4" />
-                  <span>Ciudad de México</span>
+                  <span>Celaya, Guanajuato</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-4 h-4" />
-                  <span>pocsaproyectos@gmail.com</span>
+                    <a
+    href={
+      "mailto:pocsaproyectos@gmail.com" +
+      "?subject=" +
+      encodeURIComponent("Solicitud de cotización — POCSA") +
+      "&body=" +
+      encodeURIComponent(
+        `Hola POCSA,
+
+Quiero una cotización para:
+• Producto/línea:
+• Cantidad:
+• Ciudad de entrega:
+
+Nombre:
+Teléfono:
+Comentarios adicionales:`
+      )
+    }
+    className="text-gray-300 hover:text-white underline underline-offset-4 decoration-white/20 transition-colors"
+  >
+    pocsaproyectos@gmail.com
+  </a>
                 </div>
               </div>
-              <div className="text-white/60 text-sm">© 2024 POCSA Muebles. Todos los derechos reservados.</div>
+          <p className="text-gray-400 text-sm">© {yearText} POCSA Muebles. Todos los derechos reservados.</p>
             </div>
           </footer>
         </section>

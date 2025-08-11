@@ -137,12 +137,27 @@ export default function ContactForm() {
                 Llámanos
               </h3>
               <p className="text-gray-600 mb-2">
-                Estamos disponibles de lunes a viernes de 9:00 AM a 6:00 PM para atender tus consultas.
+                Estamos disponibles de lunes a viernes de 9:00 AM a 6:00 PM y Sábados de 9 AM a 2 PM para atender tus consultas.
               </p>
-              <p className="text-[#71e056] font-semibold text-lg">(555) 123-4567</p>
+<a
+  href="tel:+524616133018"
+  aria-label="Llamar al 461 613 3018"
+  className="group inline-flex items-center gap-2 text-gray-900 font-medium
+             hover:text-black transition-colors focus:outline-none
+             focus-visible:ring-2 focus-visible:ring-[#71e056]/30 rounded-md"
+>
+  {/* <Phone className="w-4 h-4 text-[#71e056] transition-transform group-hover:scale-110" /> */}
+  <span className="underline underline-offset-4 decoration-[#71e056]/30 group-hover:decoration-[#71e056] pt-1">
+    461 613 3018
+  </span>
+</a>
+
+
+<p className="mt-2 text-xs text-gray-500">Haz clic para llamar.</p>
+
             </div>
 
-            <div>
+            {/* <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-[#71e056]" />
                 Visítanos
@@ -155,7 +170,7 @@ export default function ContactForm() {
                 <br />
                 Celaya, Guanajuato, México
               </p>
-            </div>
+            </div> */}
 
           </div>
         </div>
