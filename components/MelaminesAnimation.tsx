@@ -34,7 +34,7 @@ export default function MelaminesAnimation() {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=190%",
+        end: "+=200%",
         scrub: true,
         pin: true,
         pinSpacing: true,
