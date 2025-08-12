@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Teléfono */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Número de Teléfono</h3>
-            <p className="text-gray-300">461 613 3018</p>
+            <p className="text-gray-300">461 219 1762</p>
           </div>
 
           {/* Redes Sociales */}

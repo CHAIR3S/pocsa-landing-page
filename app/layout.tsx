@@ -17,7 +17,7 @@ export const metadata = {
     siteName: "Pocsa Muebles",
     images: [
       {
-        url: "/og-image.jpg", // Debe estar en /public
+        url: "/logo-color.png", 
         width: 1200,
         height: 630,
         alt: "Muebles Pocsa",
@@ -31,7 +31,7 @@ export const metadata = {
     title: "Pocsa Muebles",
     description:
       "Diseño, calidad y durabilidad para tu hogar y oficina.",
-    images: ["/og-image.jpg"],
+    images: ["/logo-color.png"],
   },
 };
 

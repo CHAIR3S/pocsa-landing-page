@@ -16,6 +16,9 @@ const OPTIONS = [
   { value: "recepciones", label: "Recepciones" },
 ];
 
+const TO_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_TO || "pasalaguafarid@gmail.com";
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -41,33 +44,78 @@ export default function ContactForm() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setFormState("sending");
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error("SEND_FAILED");
-      setFormState("sent");
-      setFormData({ name: "", email: "", interestedIn: "", phone: "", message: "" });
-      setTimeout(() => setFormState("idle"), 3000);
-    } catch {
-      setFormState("error");
-      setTimeout(() => setFormState("idle"), 3000);
-    }
-  };
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const buildSubject = () => {
+    const { name, interestedIn } = formData;
+    return `Contacto Web: ${name || "Sin nombre"} — ${
+      interestedIn || "Sin categoría"
+    }`;
+  };
+
+  const buildBody = () => {
+    const { name, email, interestedIn, phone, message } = formData;
+    const lines = [
+      "Nuevo mensaje desde el sitio POCSA",
+      "---------------------------------",
+      `Nombre: ${name || "No proporcionado"}`,
+      `Correo: ${email || "No proporcionado"}`,
+      `Teléfono: ${phone || "No proporcionado"}`,
+      `Interesado en: ${interestedIn || "No especificado"}`,
+      "",
+      "Mensaje:",
+      message || "(Sin mensaje)",
+      "",
+      "—",
+      "Enviado automáticamente desde el formulario web.",
+    ];
+    return lines.join("\n");
+  };
+
+  const openGmailCompose = (to: string, subject: string, body: string) => {
+    const url =
+      `https://mail.google.com/mail/?view=cm&fs=1` +
+      `&to=${encodeURIComponent(to)}` +
+      `&su=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(body)}`;
+    const win = window.open(url, "_blank", "noopener,noreferrer");
+
+    // Fallback a mailto si el popup fue bloqueado
+    if (!win) {
+      const mailto = `mailto:${encodeURIComponent(
+        to
+      )}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+        body
+      )}`;
+      window.location.href = mailto;
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Abre Gmail con el borrador listo (no usa servidor ni contraseñas)
+    openGmailCompose(TO_EMAIL, buildSubject(), buildBody());
+
+    // Feedback visual
+    setFormState("sent");
+    setFormData({
+      name: "",
+      email: "",
+      interestedIn: "",
+      phone: "",
+      message: "",
+    });
+    setTimeout(() => setFormState("idle"), 3000);
+  };
+
   const selectLabel =
-    OPTIONS.find((o) => o.value === formData.interestedIn)?.label || "Selecciona una categoría";
+    OPTIONS.find((o) => o.value === formData.interestedIn)?.label ||
+    "Selecciona una categoría";
 
   return (
     <section className="w-screen py-20 bg-gray-100">
@@ -82,7 +130,10 @@ export default function ContactForm() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Nombre
                   </label>
                   <input
@@ -91,13 +142,17 @@ export default function ContactForm() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent !text-gray-900 placeholder:text-gray-400 caret-black focus:border-black focus:outline-none transition-colors"
+                    style={{ WebkitTextFillColor: "#111827" }}
                     required
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Correo Electrónico
                   </label>
                   <input
@@ -106,7 +161,8 @@ export default function ContactForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent !text-gray-900 placeholder:text-gray-400 caret-black focus:border-black focus:outline-none transition-colors"
+                    style={{ WebkitTextFillColor: "#111827" }}
                     required
                   />
                 </div>
@@ -126,7 +182,9 @@ export default function ContactForm() {
                       aria-expanded={open}
                       onClick={() => {
                         setOpen(!open);
-                        const i = OPTIONS.findIndex(o => o.value === formData.interestedIn);
+                        const i = OPTIONS.findIndex(
+                          (o) => o.value === formData.interestedIn
+                        );
                         setHighlight(i >= 0 ? i : 0);
                       }}
                       onKeyDown={(e) => {
@@ -137,11 +195,16 @@ export default function ContactForm() {
                         } else if (e.key === "ArrowUp") {
                           e.preventDefault();
                           setOpen(true);
-                          setHighlight((h) => (h - 1 + OPTIONS.length) % OPTIONS.length);
+                          setHighlight(
+                            (h) => (h - 1 + OPTIONS.length) % OPTIONS.length
+                          );
                         } else if (e.key === "Enter" && open) {
                           e.preventDefault();
                           const opt = OPTIONS[highlight];
-                          setFormData((f) => ({ ...f, interestedIn: opt.value }));
+                          setFormData((f) => ({
+                            ...f,
+                            interestedIn: opt.value,
+                          }));
                           setOpen(false);
                         } else if (e.key === "Escape") {
                           setOpen(false);
@@ -150,15 +213,23 @@ export default function ContactForm() {
                       className={clsx(
                         "w-full text-left px-4 py-3 border-b-2 bg-transparent transition-colors",
                         open ? "border-black" : "border-gray-300",
-                        "focus:outline-none"
+                        "focus:outline-none !text-gray-900"
                       )}
+                      style={{ WebkitTextFillColor: "#111827" }}
                     >
                       <div className="flex items-center justify-between">
-                        <span className={clsx(selectLabel ? "text-gray-900" : "text-gray-400")}>
+                        <span
+                          className={clsx(
+                            selectLabel ? "text-gray-900" : "text-gray-400"
+                          )}
+                        >
                           {selectLabel}
                         </span>
                         <ChevronDown
-                          className={clsx("w-4 h-4 transition-transform", open && "rotate-180")}
+                          className={clsx(
+                            "w-4 h-4 transition-transform",
+                            open && "rotate-180"
+                          )}
                         />
                       </div>
                     </button>
@@ -169,7 +240,9 @@ export default function ContactForm() {
                         "absolute left-1/2 -translate-x-1/2 z-20 mt-3 w-[22rem]",
                         "rounded-2xl border border-black/5 bg-white/90 backdrop-blur shadow-2xl",
                         "transition-all duration-150",
-                        open ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-95"
+                        open
+                          ? "opacity-100 scale-100"
+                          : "pointer-events-none opacity-0 scale-95"
                       )}
                     >
                       <div className="p-3 grid grid-cols-2 gap-2">
@@ -183,7 +256,10 @@ export default function ContactForm() {
                               aria-selected={selected}
                               onMouseEnter={() => setHighlight(idx)}
                               onClick={() => {
-                                setFormData((f) => ({ ...f, interestedIn: opt.value }));
+                                setFormData((f) => ({
+                                  ...f,
+                                  interestedIn: opt.value,
+                                }));
                                 setOpen(false);
                                 btnRef.current?.focus();
                               }}
@@ -197,7 +273,9 @@ export default function ContactForm() {
                               <span className="font-medium text-gray-900">
                                 {opt.label}
                               </span>
-                              {selected && <Check className="w-4 h-4 text-green-600" />}
+                              {selected && (
+                                <Check className="w-4 h-4 text-green-600" />
+                              )}
                             </button>
                           );
                         })}
@@ -212,7 +290,10 @@ export default function ContactForm() {
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Número de Teléfono
                   </label>
                   <input
@@ -221,13 +302,17 @@ export default function ContactForm() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent !text-gray-900 placeholder:text-gray-400 caret-black focus:border-black focus:outline-none transition-colors"
+                    style={{ WebkitTextFillColor: "#111827" }}
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Mensaje
                 </label>
                 <textarea
@@ -236,7 +321,8 @@ export default function ContactForm() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={6}
-                  className="text-black w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent !text-gray-900 placeholder:text-gray-400 caret-black focus:border-black focus:outline-none transition-colors resize-none"
+                  style={{ WebkitTextFillColor: "#111827" }}
                   placeholder="Cuéntanos sobre tu proyecto o consulta..."
                   required
                 />
@@ -252,10 +338,12 @@ export default function ContactForm() {
                 </Button>
 
                 {formState === "sent" && (
-                  <span className="text-sm text-green-600">¡Enviado con éxito!</span>
+                  <span className="text-sm text-green-600">¡Borrador abierto en Gmail!</span>
                 )}
                 {formState === "error" && (
-                  <span className="text-sm text-red-600">Hubo un error. Intenta de nuevo.</span>
+                  <span className="text-sm text-red-600">
+                    Hubo un error. Intenta de nuevo.
+                  </span>
                 )}
               </div>
             </form>
@@ -272,12 +360,12 @@ export default function ContactForm() {
                 Lunes a Viernes 9:00–18:00 · Sábado 9:00–14:00
               </p>
               <a
-                href="tel:+524616133018"
-                aria-label="Llamar al 461 613 3018"
+                href="tel:+524612191762"
+                aria-label="Llamar al 461 219 1762"
                 className="group inline-flex items-center gap-2 text-gray-900 font-medium hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#71e056]/30 rounded-md"
               >
                 <span className="underline underline-offset-4 decoration-[#71e056]/30 group-hover:decoration-[#71e056] pt-1">
-                  461 613 3018
+                  461 219 1762
                 </span>
               </a>
               <p className="mt-2 text-xs text-gray-500">Haz clic para llamar.</p>

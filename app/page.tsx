@@ -325,7 +325,7 @@ const HDR_STROKE = "0.35px rgba(0,0,0,0.55)";
     <div className="flex items-center space-x-2">
       <Phone className="w-4 h-4" style={{ filter: HDR_ICON_FILTER }} />
       <span className="text-sm" style={{ color: "#fff", textShadow: HDR_TEXT_SHADOW, WebkitTextStroke: HDR_STROKE }}>
-        461 273 8725
+        461 219 1762
       </span>
     </div>
     <Button
