@@ -43,16 +43,25 @@ export default function VestAnimation() {
     );
 
     const state = { f: 0 };
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "+=170%",
-        scrub: true,
-        pin: true,
-        pinSpacing: true,
-      },
-    });
+ const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: sectionRef.current,
+    start: "top top",
+    end: "+=170%",
+    scrub: true,
+    pin: true,
+    pinSpacing: true,
+    onLeaveBack: () => {
+      // Forzar frame 0
+      const s0 = getSrc(0);
+      if (s0 && imgRef.current) {
+        lastFrameRef.current = 0;
+        imgRef.current.src = s0;
+      }
+    }
+  },
+});
+
 
     const update = () => {
       const idx = Math.min(frameCount - 1, Math.max(0, Math.round(state.f)));
