@@ -444,7 +444,7 @@ Comentarios adicionales:`
         </section>
       </div>
 
-      <div className="h-[15vh]" />
+      <div className="h-[10vh]" />
 
       {/* — Sección extra con el texto que revelamos — */}
       <div
