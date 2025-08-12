@@ -14,7 +14,7 @@ export default function SawAnimation() {
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const getFrameSrc = (index: number) =>
-    `/images/saw-animation/frame_${String(index).padStart(3, "0")}.jpg`;
+    `/images/saw-animation/frame_${String(index).padStart(3, "0")}.webp`;
 
 useEffect(() => {
   requestAnimationFrame(() => {

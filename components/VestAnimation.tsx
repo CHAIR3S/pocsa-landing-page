@@ -14,7 +14,7 @@ export default function VestAnimation() {
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const getFrameSrc = (index: number) =>
-    `/images/vest-animation/frame_${String(index).padStart(3, "0")}.jpg`;
+    `/images/vest-animation/frame_${String(index).padStart(3, "0")}.webp`;
 
   useEffect(() => {
     requestAnimationFrame(() => {

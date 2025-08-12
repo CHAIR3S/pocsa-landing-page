@@ -348,7 +348,7 @@ const HDR_STROKE = "0.35px rgba(0,0,0,0.55)";
         <section className="relative h-full">
           {/* Background Image */}
           <div ref={imageRef} className="absolute inset-0">
-            <Image src="/images/office-cover.jpg" alt="Modern living room interior" fill className="object-cover scale-[1.2]" priority />
+            <Image src="/images/office-cover.webp" alt="Modern living room interior" fill className="object-cover scale-[1.2]" priority />
             <div className="absolute inset-0 bg-black/20 m-[-5vw]" />
           </div>
 
@@ -517,7 +517,7 @@ Comentarios adicionales:`
           className="w-screen h-screen bg-black/10 bg-blend-multiply"
           style={{
             clipPath: "polygon(0 0%, 100% 0, 100% 95%, 0% 100%)",
-            backgroundImage: 'url("/images/office-hd.png")',
+            backgroundImage: 'url("/images/office-hd.webp")',
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "80% 50%",

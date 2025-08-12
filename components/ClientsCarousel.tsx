@@ -31,17 +31,17 @@ const proyectos: Proyecto[] = [
     imagenes: [
       {
         type: "image",
-        src: "/images/finished/islas-proyecto-1.jpg",
+        src: "/images/finished/islas-proyecto-1.webp",
         alt: "Sala modular en nogal con líneas limpias y luz cálida",
       },
       {
         type: "image",
-        src: "/images/finished/islas-proyecto-2.jpg",
+        src: "/images/finished/islas-proyecto-2.webp",
         alt: "Detalle de veta de nogal y herrajes ocultos",
       },
       {
         type: "image",
-        src: "/images/finished/islas-proyecto-3.jpg",
+        src: "/images/finished/islas-proyecto-3.webp",
         alt: "Módulos de almacenaje oculto con cierre suave",
       },
     ],
@@ -54,12 +54,12 @@ const proyectos: Proyecto[] = [
     imagenes: [
       {
         type: "image",
-        src: "/images/finished/cca-escuela-1.jpg",
+        src: "/images/finished/cca-escuela-1.webp",
         alt: "Cocina integral con isla central y frentes de madera",
       },
       {
         type: "image",
-        src: "/images/finished/cca-escuela-2.jpg",
+        src: "/images/finished/cca-escuela-2.webp",
         alt: "Organizadores internos que optimizan el espacio en cajones",
       },
     ],
@@ -73,13 +73,13 @@ const proyectos: Proyecto[] = [
       {
         type: "video",
         src: "/videos/oficina-proyecto-1-video.mp4",
-        poster: "/videos/poster1.jpg",
+        poster: "/videos/poster1.webp",
         alt: "Recámara principal con cabecera iluminada y vestidor",
       },
       {
         type: "video",
         src: "/videos/oficina-proyecto-2-video.mp4",
-        poster: "/videos/poster2.jpg",
+        poster: "/videos/poster2.webp",
         alt: "Vestidor modular con frentes de madera",
       },
     ],
@@ -90,91 +90,91 @@ const clientLogos = [
   {
     id: 1,
     name: "Universidad de Guanajuato",
-    src: "/images/universidad-guanajuato.png",
+    src: "/images/universidad-guanajuato.webp",
     width: 200,
     height: 420,
   },
   {
     id: 2,
     name: "Deacero",
-    src: "/images/logo/deacero.png",
+    src: "/images/logo/deacero.webp",
     width: 160,
     height: 80,
   },
   {
     id: 3,
     name: "Universidad Politécnica de Guanajuato",
-    src: "/images/logo/Universidad Politecnica de Guanajuato.png",
+    src: "/images/logo/Universidad Politecnica de Guanajuato.webp",
     width: 160,
     height: 80,
   },
   {
     id: 4,
     name: "agencia kia",
-    src: "/images/logo/agencia kia.png",
+    src: "/images/logo/agencia kia.webp",
     width: 160,
     height: 80,
   },
   {
     id: 5,
     name: "nissan",
-    src: "/images/logo/nissan.png",
+    src: "/images/logo/nissan.webp",
     width: 160,
     height: 80,
   },
   {
     id: 6,
     name: "sep guanajuato",
-    src: "/images/logo/sep guanajuato.png",
+    src: "/images/logo/sep guanajuato.webp",
     width: 160,
     height: 80,
   },
   {
     id: 7,
     name: "Siiosa",
-    src: "/images/logo/siiosa.png",
+    src: "/images/logo/siiosa.webp",
     width: 160,
     height: 80,
   },
   {
     id: 8,
     name: "Harinera los Pirineos",
-    src: "/images/logo/Harinera los Pirineos.png",
+    src: "/images/logo/Harinera los Pirineos.webp",
     width: 160,
     height: 80,
   },
   {
     id: 9,
     name: "condumex",
-    src: "/images/logo/condumex.png",
+    src: "/images/logo/condumex.webp",
     width: 160,
     height: 80,
   },
   {
     id: 10,
     name: "mosmex",
-    src: "/images/logo/mosmex.png",
+    src: "/images/logo/mosmex.webp",
     width: 160,
     height: 80,
   },
   {
     id: 11,
     name: "flensa",
-    src: "/images/logo/flensa.png",
+    src: "/images/logo/flensa.webp",
     width: 160,
     height: 180,
   },
   {
     id: 12,
     name: "geely",
-    src: "/images/logo/geely.png",
+    src: "/images/logo/geely.webp",
     width: 160,
     height: 180,
   },
   {
     id: 13,
     name: "agricultores el fuente",
-    src: "/images/logo/agricultores el fuente.png",
+    src: "/images/logo/agricultores el fuente.webp",
     width: 160,
     height: 180,
   },
@@ -456,7 +456,7 @@ export default function ClientesYProyectos() {
             height={1200}
             width={1000}
             alt="logo marca guanajuato"
-            src="/images/logo/logo-marca-guanajuato.png"
+            src="/images/logo/logo-marca-guanajuato.webp"
             priority
             sizes="(max-width: 768px) 280px, 380px"
             className="logo-img w-[260px] md:w-[380px] h-auto transition-transform duration-300 group-hover:scale-[1.05]"
