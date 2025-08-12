@@ -440,7 +440,7 @@ export default function ClientesYProyectos() {
         {/* TEXTO (estado inicial oculto) */}
         <span
           ref={headingRef}
-          className="pre-anim text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight text-white pb-24 md:pb-28 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]"
+          className="pre-anim text-6xl md:text-8xl lg:text-8xl font-extrabold tracking-tight text-white pb-24 md:pb-28 drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]"
         >
           Somos marca guanajuato
         </span>

@@ -98,7 +98,7 @@ export default function VestAnimation() {
       <img
         ref={imgRef}
         alt="Animación por frames"
-        className="w-full h-full object-cover select-none pointer-events-none"
+        className="w-full h-full object-cover select-none pointer-events-none bg-cover"
         draggable={false}
       />
     </section>

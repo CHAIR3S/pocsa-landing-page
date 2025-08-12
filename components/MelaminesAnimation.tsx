@@ -34,7 +34,7 @@ export default function MelaminesAnimation() {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=200%",
+        end: "+=190%",
         scrub: true,
         pin: true,
         pinSpacing: true,
@@ -83,12 +83,17 @@ export default function MelaminesAnimation() {
       ref={sectionRef}
       className="w-screen h-screen flex items-center justify-center bg-black"
     >
-      <img
-        ref={imgRef}
-        alt="Animación por frames"
-        className="w-screen h-screen object-cover select-none pointer-events-none"
-        draggable={false}
-      />
+<img
+  ref={imgRef}
+  alt="Animación por frames"
+  className="w-screen h-screen object-cover select-none pointer-events-none"
+  style={{
+    objectPosition: "center"
+  }}
+  draggable={false}
+/>
+
+
     </section>
   );
 }
