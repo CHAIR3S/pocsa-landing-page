@@ -34,7 +34,7 @@ export default function MelaminesAnimation() {
       scrollTrigger: {
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=190%",
+        end: "+=200%",
         scrub: true,
         pin: true,
         pinSpacing: true,
@@ -86,7 +86,7 @@ export default function MelaminesAnimation() {
       <img
         ref={imgRef}
         alt="Animación por frames"
-        className="w-full h-full object-cover select-none pointer-events-none"
+        className="w-screen h-screen object-cover select-none pointer-events-none"
         draggable={false}
       />
     </section>

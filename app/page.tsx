@@ -248,13 +248,20 @@ const HDR_STROKE = "0.35px rgba(0,0,0,0.55)";
 
 {/* Navigation */}
 <header className="fixed w-full z-50 flex items-center justify-between lg:px-12 backdrop-blur-xl">
-  <div
-    className="space-x-2 cursor-pointer"
-    style={{ width: 100, height: 67, overflow: "hidden", position: "relative" }}
-    onClick={goHome}
-  >
-    <Image src="/logo-pocsa-color.svg" alt="Icono" fill style={{ objectFit: "cover", cursor: "pointer" }} />
-  </div>
+<div
+  onClick={goHome}
+  className="relative cursor-pointer px-4"
+  style={{ width: 100, height: '5.5vh', position: 'relative' }}
+>
+  <Image
+    src="/logo-pocsa-color.svg"
+    alt="Icono"
+    fill
+    style={{ objectFit: "cover" }} 
+    priority
+  />
+</div>
+
 
   {/* Desktop Navigation */}
   <nav className="hidden md:flex items-center space-x-8 md:pl-[7vw] font-medium">
