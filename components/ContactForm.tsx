@@ -1,10 +1,20 @@
-"use client"
+"use client";
 
-import type React from "react"
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Phone, ChevronDown, Check } from "lucide-react";
+import clsx from "clsx";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Phone, MapPin } from "lucide-react"
+type FormState = "idle" | "sending" | "sent" | "error";
+
+const OPTIONS = [
+  { value: "islas", label: "Islas" },
+  { value: "escolar", label: "Escolar" },
+  { value: "hogar", label: "Hogar" },
+  { value: "modulos-ejecutivos", label: "Módulos Ejecutivos" },
+  { value: "mesas-de-juntas", label: "Mesas de Juntas" },
+  { value: "recepciones", label: "Recepciones" },
+];
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -13,20 +23,51 @@ export default function ContactForm() {
     interestedIn: "",
     phone: "",
     message: "",
-  })
+  });
+  const [formState, setFormState] = useState<FormState>("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Form submitted:", formData)
-    // Aquí iría la lógica para enviar el formulario
-  }
+  // --- Dropdown state
+  const [open, setOpen] = useState(false);
+  const [highlight, setHighlight] = useState(0);
+  const boxRef = useRef<HTMLDivElement | null>(null);
+  const btnRef = useRef<HTMLButtonElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (!boxRef.current) return;
+      if (!boxRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setFormState("sending");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("SEND_FAILED");
+      setFormState("sent");
+      setFormData({ name: "", email: "", interestedIn: "", phone: "", message: "" });
+      setTimeout(() => setFormState("idle"), 3000);
+    } catch {
+      setFormState("error");
+      setTimeout(() => setFormState("idle"), 3000);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const selectLabel =
+    OPTIONS.find((o) => o.value === formData.interestedIn)?.label || "Selecciona una categoría";
 
   return (
     <section className="w-screen py-20 bg-gray-100">
@@ -34,7 +75,9 @@ export default function ContactForm() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Formulario */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">Ponte en contacto</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+              Ponte en contacto
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
@@ -70,26 +113,102 @@ export default function ContactForm() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="interestedIn" className="block text-sm font-medium text-gray-700 mb-2">
+                {/* Dropdown de categorías bonito */}
+                <div ref={boxRef}>
+                  <span className="block text-sm font-medium text-gray-700 mb-2">
                     Interesado en
-                  </label>
-                  <select
-                    id="interestedIn"
-                    name="interestedIn"
-                    value={formData.interestedIn}
-                    onChange={handleChange}
-                    className="text-black w-full px-4 py-3 border-b-2 border-gray-300 bg-transparent focus:border-black focus:outline-none transition-colors"
-                    required
-                  >
-                    <option value="">Selecciona una opción</option>
-                    <option value="linea-metalica">Islas</option>
-                    <option value="linea-almacenamiento">Escolar</option>
-                    <option value="linea-escolar">Hogar</option>
-                    <option value="linea-hogar">Módulos Ejecutivos</option>
-                    <option value="linea-oficina">Mesas de Juntas</option>
-                    <option value="cotizacion">Recepciones</option>
-                  </select>
+                  </span>
+                  <div className="relative">
+                    <button
+                      ref={btnRef}
+                      type="button"
+                      aria-haspopup="listbox"
+                      aria-expanded={open}
+                      onClick={() => {
+                        setOpen(!open);
+                        const i = OPTIONS.findIndex(o => o.value === formData.interestedIn);
+                        setHighlight(i >= 0 ? i : 0);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "ArrowDown") {
+                          e.preventDefault();
+                          setOpen(true);
+                          setHighlight((h) => (h + 1) % OPTIONS.length);
+                        } else if (e.key === "ArrowUp") {
+                          e.preventDefault();
+                          setOpen(true);
+                          setHighlight((h) => (h - 1 + OPTIONS.length) % OPTIONS.length);
+                        } else if (e.key === "Enter" && open) {
+                          e.preventDefault();
+                          const opt = OPTIONS[highlight];
+                          setFormData((f) => ({ ...f, interestedIn: opt.value }));
+                          setOpen(false);
+                        } else if (e.key === "Escape") {
+                          setOpen(false);
+                        }
+                      }}
+                      className={clsx(
+                        "w-full text-left px-4 py-3 border-b-2 bg-transparent transition-colors",
+                        open ? "border-black" : "border-gray-300",
+                        "focus:outline-none"
+                      )}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className={clsx(selectLabel ? "text-gray-900" : "text-gray-400")}>
+                          {selectLabel}
+                        </span>
+                        <ChevronDown
+                          className={clsx("w-4 h-4 transition-transform", open && "rotate-180")}
+                        />
+                      </div>
+                    </button>
+
+                    {/* Panel estilo “header de categorías” */}
+                    <div
+                      className={clsx(
+                        "absolute left-1/2 -translate-x-1/2 z-20 mt-3 w-[22rem]",
+                        "rounded-2xl border border-black/5 bg-white/90 backdrop-blur shadow-2xl",
+                        "transition-all duration-150",
+                        open ? "opacity-100 scale-100" : "pointer-events-none opacity-0 scale-95"
+                      )}
+                    >
+                      <div className="p-3 grid grid-cols-2 gap-2">
+                        {OPTIONS.map((opt, idx) => {
+                          const selected = formData.interestedIn === opt.value;
+                          const active = idx === highlight;
+                          return (
+                            <button
+                              key={opt.value}
+                              role="option"
+                              aria-selected={selected}
+                              onMouseEnter={() => setHighlight(idx)}
+                              onClick={() => {
+                                setFormData((f) => ({ ...f, interestedIn: opt.value }));
+                                setOpen(false);
+                                btnRef.current?.focus();
+                              }}
+                              className={clsx(
+                                "group flex items-center justify-between rounded-xl px-3 py-3 text-sm",
+                                "border border-transparent",
+                                active && "bg-gray-100 border-gray-200",
+                                selected && "ring-1 ring-green-500/50"
+                              )}
+                            >
+                              <span className="font-medium text-gray-900">
+                                {opt.label}
+                              </span>
+                              {selected && <Check className="w-4 h-4 text-green-600" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="px-3 pb-3">
+                        <div className="text-[11px] text-gray-500">
+                          Selecciona una categoría para tu consulta.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -123,9 +242,22 @@ export default function ContactForm() {
                 />
               </div>
 
-              <Button type="submit" className="bg-black text-white px-8 py-3 hover:bg-gray-800 transition-colors cursor-pointer">
-                Enviar
-              </Button>
+              <div className="flex items-center gap-3">
+                <Button
+                  type="submit"
+                  disabled={formState === "sending"}
+                  className="bg-black text-white px-8 py-3 hover:bg-gray-800 transition-colors cursor-pointer"
+                >
+                  {formState === "sending" ? "Enviando..." : "Enviar"}
+                </Button>
+
+                {formState === "sent" && (
+                  <span className="text-sm text-green-600">¡Enviado con éxito!</span>
+                )}
+                {formState === "error" && (
+                  <span className="text-sm text-red-600">Hubo un error. Intenta de nuevo.</span>
+                )}
+              </div>
             </form>
           </div>
 
@@ -137,51 +269,22 @@ export default function ContactForm() {
                 Llámanos
               </h3>
               <p className="text-gray-600 mb-2">
-                Estamos disponibles de lunes a viernes de 9:00 AM a 6:00 PM y Sábados de 9 AM a 2 PM para atender tus consultas.
+                Lunes a Viernes 9:00–18:00 · Sábado 9:00–14:00
               </p>
-<a
-  href="tel:+524616133018"
-  aria-label="Llamar al 461 613 3018"
-  className="group inline-flex items-center gap-2 text-gray-900 font-medium
-             hover:text-black transition-colors focus:outline-none
-             focus-visible:ring-2 focus-visible:ring-[#71e056]/30 rounded-md"
->
-  {/* <Phone className="w-4 h-4 text-[#71e056] transition-transform group-hover:scale-110" /> */}
-  <span className="underline underline-offset-4 decoration-[#71e056]/30 group-hover:decoration-[#71e056] pt-1">
-    461 613 3018
-  </span>
-</a>
-
-
-<p className="mt-2 text-xs text-gray-500">Haz clic para llamar.</p>
-
+              <a
+                href="tel:+524616133018"
+                aria-label="Llamar al 461 613 3018"
+                className="group inline-flex items-center gap-2 text-gray-900 font-medium hover:text-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#71e056]/30 rounded-md"
+              >
+                <span className="underline underline-offset-4 decoration-[#71e056]/30 group-hover:decoration-[#71e056] pt-1">
+                  461 613 3018
+                </span>
+              </a>
+              <p className="mt-2 text-xs text-gray-500">Haz clic para llamar.</p>
             </div>
-
-            {/* <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-[#71e056]" />
-                Visítanos
-              </h3>
-              <p className="text-gray-600 mb-2">
-                Ven a conocer nuestro showroom y taller donde podrás ver la calidad de nuestros muebles.
-              </p>
-              <p className="text-[#71e056] font-semibold">
-                Bouleveard #123, Col. Centro
-                <br />
-                Celaya, Guanajuato, México
-              </p>
-            </div> */}
-
           </div>
         </div>
-
-        {/* Mapa */}
-        {/* <div className="mt-16">
-          <div className="bg-gray-300 h-96 rounded-lg flex items-center justify-center">
-            <p className="text-gray-600 text-lg">Mapa Celaya</p>
-          </div>
-        </div> */}
       </div>
     </section>
-  )
+  );
 }
