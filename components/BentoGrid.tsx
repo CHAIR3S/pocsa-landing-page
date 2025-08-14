@@ -54,7 +54,7 @@ const productLines: ProductLine[] = [
       "/images/grid/escolar/escolar-4.webp",
       "/images/grid/escolar/escolar-5.webp",
       "/images/grid/escolar/escolar-6.webp",
-      "/images/grid/escolar/escolar-7.jpg",
+      "/images/grid/escolar/escolar-7.webp",
       "/images/grid/escolar/escolar-8.webp",
       "/images/grid/escolar/escolar-9.webp",
       "/images/grid/escolar/escolar-10.webp",
