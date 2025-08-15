@@ -150,6 +150,42 @@ const productLines: ProductLine[] = [
   },
 ];
 
+// ===================== UTILIDADES =====================
+const imgCache = new Set<string>();
+
+function preloadImage(url: string) {
+  if (imgCache.has(url)) return Promise.resolve();
+  return new Promise<void>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      imgCache.add(url);
+      resolve();
+    };
+    img.onerror = reject;
+    img.decoding = "async";
+    (img as any).fetchPriority = "low";
+    img.src = url;
+  });
+}
+
+function preloadImages(urls: string[]) {
+  return Promise.all(urls.map(preloadImage));
+}
+
+function lockBodyScroll() {
+  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = "hidden";
+  if (scrollBarWidth > 0) {
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
+  }
+  document.documentElement.classList.add("modal-open");
+}
+function unlockBodyScroll() {
+  document.body.style.overflow = "";
+  document.body.style.paddingRight = "";
+  document.documentElement.classList.remove("modal-open");
+}
+// ======================================================
 
 export default function BentoGrid() {
   const [selectedLine, setSelectedLine] = useState<ProductLine | null>(null);
@@ -157,11 +193,17 @@ export default function BentoGrid() {
   // LIGHTBOX
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [opening, setOpening] = useState(false); // spinner al abrir galería
 
-  const openGallery = (line: ProductLine) => {
-    setSelectedLine(line);
-    setLightboxOpen(false);
-    setCurrentIndex(0);
+  const openGallery = async (line: ProductLine) => {
+    try {
+      setOpening(true);
+      await preloadImages([line.image, ...line.sampleImages]);
+      setSelectedLine(line);
+      setCurrentIndex(0);
+    } finally {
+      setOpening(false);
+    }
   };
   const closeGallery = () => {
     setSelectedLine(null);
@@ -171,11 +213,10 @@ export default function BentoGrid() {
   const openLightbox = (idx: number) => {
     setCurrentIndex(idx);
     setLightboxOpen(true);
-    document.body.style.overflow = "hidden";
   };
+
   const closeLightbox = () => {
     setLightboxOpen(false);
-    document.body.style.overflow = "";
   };
 
   const nextImg = useCallback(() => {
@@ -211,15 +252,42 @@ export default function BentoGrid() {
         scrub: true,
       },
     });
-    tl.fromTo(
-      heroRef.current,
-      { backgroundPosition: "center 50%" },
-      { backgroundPosition: "center 20%", ease: "none", duration: 0.5 }
-    );
+    tl.fromTo(heroRef.current, { backgroundPosition: "center 50%" }, { backgroundPosition: "center 20%", ease: "none", duration: 0.5 });
   }, []);
+
+  // Precarga global al montar (covers + galerías)
+  useEffect(() => {
+    const all = productLines.flatMap((l) => [l.image, ...l.sampleImages]);
+    const run = () => {
+      preloadImages(all).catch(() => {});
+    };
+    if (typeof (window as any).requestIdleCallback === "function") {
+      (window as any).requestIdleCallback(run);
+    } else {
+      setTimeout(run, 0);
+    }
+  }, []);
+
+  // Lock body scroll cuando haya modal o lightbox abiertos
+  useEffect(() => {
+    const shouldLock = !!selectedLine || !!lightboxOpen;
+    if (shouldLock) lockBodyScroll();
+    else unlockBodyScroll();
+    return () => unlockBodyScroll();
+  }, [selectedLine, lightboxOpen]);
 
   return (
     <div className="min-h-screen mb-[10vh]">
+
+
+
+      {/* overlay mientras abre galería */}
+      {opening && (
+        <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+          <div className="text-white text-sm">Cargando galería…</div>
+        </div>
+      )}
+
       <div className="max-w-[1200px] xl:max-w-[1400px] mx-auto px-4">
         {/* ===== Bento (12 cols XL / 6 cols MD / 1 col SM) ===== */}
         <div
@@ -242,6 +310,7 @@ export default function BentoGrid() {
               xl:col-start-1 xl:col-span-7 xl:row-start-1 xl:row-span-4
             "
             onClick={() => openGallery(productLines[0])}
+            onMouseEnter={() => preloadImages([productLines[0].image, ...productLines[0].sampleImages])}
             style={{
               backgroundImage: `url(${productLines[0].image})`,
               backgroundSize: "cover",
@@ -260,6 +329,7 @@ export default function BentoGrid() {
               xl:col-start-8 xl:col-span-5 xl:row-start-1 xl:row-span-2
             "
             onClick={() => openGallery(productLines[1])}
+            onPreload={() => preloadImages([productLines[1].image, ...productLines[1].sampleImages])}
           />
 
           {/* Banda 2 Derecha: HOGAR */}
@@ -270,10 +340,10 @@ export default function BentoGrid() {
               xl:col-start-8 xl:col-span-5 xl:row-start-3 xl:row-span-2
             "
             onClick={() => openGallery(productLines[2])}
+            onPreload={() => preloadImages([productLines[2].image, ...productLines[2].sampleImages])}
           />
 
-          {/* ===== Banda 3: rectángulo completo y alto ===== */}
-          {/* Izquierda: MÓDULOS (4 cols x 2 filas) */}
+          {/* ===== Banda 3 ===== */}
           <Tile
             item={productLines[3]}
             className="
@@ -281,8 +351,9 @@ export default function BentoGrid() {
               xl:col-start-1 xl:col-span-4 xl:row-start-5 xl:row-span-2
             "
             onClick={() => openGallery(productLines[3])}
+            onPreload={() => preloadImages([productLines[3].image, ...productLines[3].sampleImages])}
           />
-          {/* Derecha: Mesas y Recepciones LATERALMENTE, ambas 2 filas */}
+
           <Tile
             item={productLines[4]} // Mesas
             className="
@@ -290,6 +361,7 @@ export default function BentoGrid() {
               xl:col-start-5 xl:col-span-4 xl:row-start-5 xl:row-span-2
             "
             onClick={() => openGallery(productLines[4])}
+            onPreload={() => preloadImages([productLines[4].image, ...productLines[4].sampleImages])}
           />
           <Tile
             item={productLines[5]} // Recepciones
@@ -298,6 +370,7 @@ export default function BentoGrid() {
               xl:col-start-9 xl:col-span-4 xl:row-start-5 xl:row-span-2
             "
             onClick={() => openGallery(productLines[5])}
+            onPreload={() => preloadImages([productLines[5].image, ...productLines[5].sampleImages])}
           />
         </div>
       </div>
@@ -318,33 +391,60 @@ export default function BentoGrid() {
                 <h2 className="text-xl md:text-2xl font-bold text-white">{selectedLine.title}</h2>
                 <p className="text-sm text-gray-300">{selectedLine.category}</p>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={closeGallery}
-                className="text-white hover:bg-white/10"
-                aria-label="Cerrar"
-              >
+              <Button variant="ghost" size="icon" onClick={closeGallery} className="text-white hover:bg-white/10" aria-label="Cerrar">
                 <X className="h-6 w-6" />
               </Button>
             </div>
 
             {/* Contenido scrolleable */}
-            <div className="overflow-y-auto max-h-[calc(85vh-72px)] px-4 pb-4 styled-scrollbar">
+            <div className="overflow-y-auto max-h-[calc(85vh-72px)] px-4 pb-4 scrollbar-sleek">
               <div className="mx-auto max-w-5xl px-2">
                 <div className="masonry-container">
                   <style jsx>{`
-                    .masonry-container { column-count: 2; column-gap: .75rem; }
-                    @media (min-width: 768px) { .masonry-container { column-count: 3; } }
-                    @media (min-width: 1024px){ .masonry-container { column-count: 4; } }
-                    .masonry-item { break-inside: avoid; margin-bottom: .75rem; display: inline-block; width: 100%; opacity: 0; animation: fadeIn .5s ease forwards; }
-                    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
-                    .masonry-item img { width: 100%; height: auto; border-radius: .5rem; box-shadow: 0 4px 10px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; cursor: zoom-in; }
-                    .masonry-item img:hover { transform: scale(1.015); box-shadow: 0 10px 20px rgba(0,0,0,.35); }
-                    .styled-scrollbar::-webkit-scrollbar { width: 6px; }
-                    .styled-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                    .styled-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 9999px; }
-                    .styled-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
+                    .masonry-container {
+                      column-count: 2;
+                      column-gap: 0.75rem;
+                    }
+                    @media (min-width: 768px) {
+                      .masonry-container {
+                        column-count: 3;
+                      }
+                    }
+                    @media (min-width: 1024px) {
+                      .masonry-container {
+                        column-count: 4;
+                      }
+                    }
+                    .masonry-item {
+                      break-inside: avoid;
+                      margin-bottom: 0.75rem;
+                      display: inline-block;
+                      width: 100%;
+                      opacity: 0;
+                      animation: fadeIn 0.5s ease forwards;
+                    }
+                    @keyframes fadeIn {
+                      from {
+                        opacity: 0;
+                        transform: translateY(12px);
+                      }
+                      to {
+                        opacity: 1;
+                        transform: translateY(0);
+                      }
+                    }
+                    .masonry-item img {
+                      width: 100%;
+                      height: auto;
+                      border-radius: 0.5rem;
+                      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+                      transition: transform 0.25s ease, box-shadow 0.25s ease;
+                      cursor: zoom-in;
+                    }
+                    .masonry-item img:hover {
+                      transform: scale(1.015);
+                      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+                    }
                   `}</style>
 
                   {selectedLine.sampleImages.map((image, index) => (
@@ -353,6 +453,7 @@ export default function BentoGrid() {
                         src={image}
                         alt={`${selectedLine.title} ${index + 1}`}
                         loading="lazy"
+                        decoding="async"
                         onClick={() => openLightbox(index)}
                       />
                     </div>
@@ -366,40 +467,36 @@ export default function BentoGrid() {
 
       {/* ======= LIGHTBOX ======= */}
       {selectedLine && lightboxOpen && (
-        <div
-          className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center"
-          onClick={closeLightbox} // click fuera cierra
-        >
-          {/* Contenido */}
+        <div className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center" onClick={closeLightbox}>
           <div
-            className="relative flex items-center gap-6"
-            onClick={(e) => e.stopPropagation()} // evita que cierre al click dentro
+            className="relative"
+            style={{ width: "min(1100px, 95vw)", height: "min(760px, 85vh)" }}
+            onClick={(e) => e.stopPropagation()}
           >
+            {/* Imagen en marco fijo */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <img
+                src={selectedLine.sampleImages[currentIndex]}
+                alt={`Imagen ${currentIndex + 1}`}
+                className="rounded-lg shadow-2xl"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                decoding="async"
+              />
+            </div>
+
             {/* Prev */}
             <button
               onClick={prevImg}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white z-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
               aria-label="Anterior"
             >
               <ChevronLeft className="w-7 h-7" />
             </button>
 
-            {/* Imagen */}
-            <div className="max-w-[90vw] max-h-[85vh]">
-              <img
-                src={selectedLine.sampleImages[currentIndex]}
-                alt={`Imagen ${currentIndex + 1}`}
-                className="w-auto h-auto max-w-full max-h-[85vh] rounded-lg shadow-2xl"
-              />
-              <div className="mt-3 text-center text-sm text-white/70">
-                {currentIndex + 1} / {selectedLine.sampleImages.length}
-              </div>
-            </div>
-
             {/* Next */}
             <button
               onClick={nextImg}
-              className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white z-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
               aria-label="Siguiente"
             >
               <ChevronRight className="w-7 h-7" />
@@ -413,6 +510,11 @@ export default function BentoGrid() {
             >
               <X className="w-6 h-6" />
             </button>
+
+            {/* Paginador */}
+            <div className="absolute bottom-3 inset-x-0 text-center text-sm text-white/70">
+              {currentIndex + 1} / {selectedLine.sampleImages.length}
+            </div>
           </div>
         </div>
       )}
@@ -427,9 +529,7 @@ function InfoCard({ item }: { item: ProductLine }) {
       className="absolute bottom-6 left-6 right-6 rounded-xl p-4 shadow-lg backdrop-blur-md"
       style={{ backgroundColor: "rgba(255,255,255,0.20)", border: "1px solid rgba(255,255,255,0.30)" }}
     >
-      <span className="text-sm font-medium text-white opacity-90 block mb-1">
-        {item.category}
-      </span>
+      <span className="text-sm font-medium text-white opacity-90 block mb-1">{item.category}</span>
       <h2 className="text-2xl font-bold text-white mb-3 leading-tight">{item.title}</h2>
       <Button
         variant="secondary"
@@ -447,10 +547,12 @@ function Tile({
   item,
   className,
   onClick,
+  onPreload,
 }: {
   item: ProductLine;
   className?: string;
   onClick?: () => void;
+  onPreload?: () => void;
 }) {
   return (
     <div
@@ -461,6 +563,7 @@ function Tile({
         ${className || ""}
       `}
       onClick={onClick}
+      onMouseEnter={onPreload}
       style={{
         backgroundImage: `url(${item.image})`,
         backgroundSize: "cover",
@@ -472,9 +575,7 @@ function Tile({
         className="absolute bottom-4 left-4 right-4 rounded-xl p-4 shadow-lg backdrop-blur-md"
         style={{ backgroundColor: "rgba(255,255,255,0.20)", border: "1px solid rgba(255,255,255,0.30)" }}
       >
-        <span className="text-sm font-medium text-white block mb-1 opacity-90">
-          {item.category}
-        </span>
+        <span className="text-sm font-medium text-white block mb-1 opacity-90">{item.category}</span>
         <h3 className="text-xl font-bold text-white mb-2 leading-tight">{item.title}</h3>
         <Button
           variant="secondary"
