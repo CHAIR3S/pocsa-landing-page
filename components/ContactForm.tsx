@@ -17,7 +17,7 @@ const OPTIONS = [
 ];
 
 const TO_EMAIL =
-  process.env.NEXT_PUBLIC_CONTACT_TO || "pasalaguafarid@gmail.com";
+  process.env.NEXT_PUBLIC_CONTACT_TO || "pocsaproyectos@gmail.com";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
