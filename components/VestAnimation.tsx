@@ -10,10 +10,14 @@ gsap.registerPlugin(ScrollTrigger);
 export default function VestAnimation() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const lastFrameRef = useRef(-1);
+  const lastFrameRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  const frameCount = 64;
+  // tus archivos: frame_001.webp ... frame_065.webp
+  const first = 1;
+  const frameCount = 65;
+  const last = first + frameCount - 1;
+
   const { ready, getSrc, isLoaded, warmAround } = useFrameBlobs({
     basePath: "/images/vest-animation/frame_",
     frameCount,
@@ -21,13 +25,18 @@ export default function VestAnimation() {
     ext: "webp",
     preloadAhead: 20,
     concurrent: 6,
-    startIndex: 0,
+    startIndex: first, // 👈 importante
   });
 
-  useEffect(() => {
-    if (!sectionRef.current) return;
+  const poster = "/images/vest-animation/frame_001.webp";
 
-    // fade-in cuando llega
+  useEffect(() => {
+    if (!sectionRef.current || !imgRef.current) return;
+
+    // Póster desde el arranque
+    imgRef.current.src = poster;
+    lastFrameRef.current = first;
+
     gsap.fromTo(
       sectionRef.current,
       { opacity: 0 },
@@ -42,40 +51,44 @@ export default function VestAnimation() {
       }
     );
 
-    const state = { f: 0 };
- const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: sectionRef.current,
-    start: "top top",
-    end: "+=170%",
-    scrub: true,
-    pin: true,
-    pinSpacing: true,
-    onLeaveBack: () => {
-      // Forzar frame 0
-      const s0 = getSrc(0);
-      if (s0 && imgRef.current) {
-        lastFrameRef.current = 0;
-        imgRef.current.src = s0;
-      }
-    }
-  },
-});
+    const state = { f: first };
 
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=170%",
+        scrub: true,
+        pin: true,
+        pinSpacing: true,
+        onLeaveBack: () => {
+          // Al volver arriba, pon SIEMPRE un src válido
+          const s = getSrc(first);
+          if (imgRef.current) {
+            imgRef.current.src = s && isLoaded(first) ? s : poster;
+            lastFrameRef.current = first;
+          }
+        },
+      },
+    });
 
     const update = () => {
-      const idx = Math.min(frameCount - 1, Math.max(0, Math.round(state.f)));
+      // estado f va de first..last
+      const idx = Math.min(last, Math.max(first, Math.round(state.f)));
       if (idx === lastFrameRef.current) return;
-      const src = getSrc(idx);
-      if (src && isLoaded(idx) && imgRef.current) {
-        lastFrameRef.current = idx;
-        imgRef.current.src = src;
-        warmAround(idx);
+
+      if (isLoaded(idx)) {
+        const s = getSrc(idx);
+        if (s && imgRef.current) {
+          imgRef.current.src = s;
+          lastFrameRef.current = idx;
+          warmAround(idx);
+        }
       }
     };
 
     tl.to(state, {
-      f: frameCount - 1,
+      f: last,
       ease: "none",
       onUpdate: () => {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -83,20 +96,21 @@ export default function VestAnimation() {
       },
     });
 
-    // Primer frame
-    const id = requestAnimationFrame(() => {
-      const s0 = getSrc(0);
-      if (s0 && imgRef.current) imgRef.current.src = s0;
-    });
+    // Si ya está ready, intenta poner el primer frame real
+    if (ready) {
+      const s = getSrc(first);
+      if (s && isLoaded(first) && imgRef.current) {
+        imgRef.current.src = s;
+        lastFrameRef.current = first;
+      }
+    }
 
     ScrollTrigger.refresh();
 
     return () => {
-      cancelAnimationFrame(id);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       tl.kill();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
   return (
@@ -107,7 +121,10 @@ export default function VestAnimation() {
       <img
         ref={imgRef}
         alt="Animación por frames"
-        className="w-full h-full object-cover select-none pointer-events-none bg-cover"
+        src="/images/vest-animation/frame_001.webp"   // 👈 SSR poster
+        loading="eager"
+        decoding="sync"
+        className="block w-full h-full object-cover select-none pointer-events-none"
         draggable={false}
       />
     </section>

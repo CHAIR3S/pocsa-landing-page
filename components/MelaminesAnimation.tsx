@@ -19,7 +19,7 @@ export default function MelaminesAnimation() {
     frameCount,
     pad: 3,
     ext: "webp",
-    preloadAhead: 16,
+    preloadAhead: 35,
     concurrent: 6,
     startIndex: 0,
   });

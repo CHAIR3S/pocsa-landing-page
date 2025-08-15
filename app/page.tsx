@@ -477,6 +477,8 @@ Comentarios adicionales:`
         </section>
       </div>
 
+      <div className="h-[20vh]"></div>
+
       <section ref={psicologoSectionRef} className="w-screen h-screen opacity-0">
         <MelaminesAnimation />
       </section>
