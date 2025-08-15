@@ -109,6 +109,14 @@ const HDR_STROKE = "0.35px rgba(0,0,0,0.55)";
   };
 
   useEffect(() => {
+  window.history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+}, []);
+
+// Tus otros useEffect de GSAP...
+
+
+  useEffect(() => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
